@@ -324,23 +324,31 @@ function Home() {
           <div className="menu-category">
             <i className="bi bi-check2"></i> Entradas:
           </div>
+          <label id="entrada1" className="entrada1">          
           <div className="menu-item">
             - Caldo de Pollo <input type="radio" name="entrada" value="1" />
           </div>
+          </label>
+          <label id="entrada2" className="entrada2">      
           <div className="menu-item">
             - Yuquitas con Tartara{" "}
             <input type="radio" name="entrada" value="2" />
           </div>
+          </label>
 
           <div className="menu-category">
             <i className="bi bi-check2"></i> Fondos:
           </div>
+          <label id="fondo1" className="fondo1"> 
           <div className="menu-item">
             - Aji de Gallina <input type="radio" name="fondo" value="1" />
           </div>
+          </label>
+          <label id="fondo2" className="fondo2"> 
           <div className="menu-item">
             - Pollo a la Mostaza <input type="radio" name="fondo" value="2" />
           </div>
+          </label>
 
           <div className="menu-price">Precio: s/.12.00</div>
           <button data-bs-toggle="modal"
@@ -408,12 +416,10 @@ function Home() {
                   Votación para el Menú del Día
                 </h2>
                 <p className="card-text">
-                  En esta nueva sección se podrá votar por los platos que se
-                  ofrecerán el día siguiente. Elige tu plato preferido para el
-                  día de mañana, tienes hasta las 6pm para votar.
+                  En esta nueva sección puedes participar activamente en la elección del menú que se servirá al día siguiente. Revisa las imágenes de los platos disponibles y selecciona tus opciones favoritas en las categorías de entradas y fondos.<br />Tu voto es importante para que podamos ofrecer los platos más deseados por todos. Las votaciones están abiertas hasta las 6:00 pm cada día, y los resultados definirán el menú del día siguiente.<br />¡No pierdas la oportunidad de elegir lo que más te gusta! Gracias por ser parte de esta dinámica que busca hacer el almuerzo más participativo y delicioso.
                 </p>
                 {/* Espacio para imagen */}
-                <div className="text-center mt-3">
+                <div className="text-center mt-2">
                   <img
                     src="../img/comidas_criollas_peruanas.png"
                     alt="Imagen explicativa"

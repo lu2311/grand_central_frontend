@@ -22,13 +22,9 @@ section {
   padding: 15px 0;
 }
 
-.seccion-descripcion {
-  font-size: 1.2rem;
-  color: #584e4e;
-}
-
-.seccion-texto {
-  font-size: 1.2rem;
+input[type="radio"] {
+  accent-color: #ff9100;
+  width: 40px;
 }
 
 /*Barra de navegacion*/
