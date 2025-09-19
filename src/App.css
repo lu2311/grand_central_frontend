@@ -101,6 +101,10 @@ input[type="radio"] {
   font-weight: 700;
 }
 
+.platos .overlay p {
+    color: #666161;
+  }
+
 .platos-carta img {
   height: 100%;
   width: 100%;
@@ -265,6 +269,10 @@ input[type="radio"] {
   color: #442a30;
   border-bottom: 2px solid #b46a09;
   padding-bottom: 8px;
+}
+
+.votacion-explicacion .votacion-explicacion-container {
+  padding: 20px ;
 }
 
 .card-text {
@@ -583,9 +591,12 @@ footer {
   width: 100%;
 }
 
-.signin-contenedor {
-  margin-top: 50px;
+.login-wraper {
+  max-width: 400px; /* You can adjust this width */
+  width: 100%;
+  padding: 2rem; /* Add padding here to control internal space */
 }
+
 
 .card {
   border-radius: 10px;

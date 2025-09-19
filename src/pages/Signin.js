@@ -4,7 +4,7 @@ function Signin() {
   return (
     <>
 
-      <div className="signin-contenedor container d-flex justify-content-center align-items-center vh-100">
+      <div className="signin-contenedor container d-flex justify-content-center align-items-center mt-5 mb-5">
         <div className="card signin shadow-lg p-4" style={{ maxWidth: "500px", width: "100%" }}>
           {/* Título */}
           <div className="text-center mb-4">
@@ -52,7 +52,18 @@ function Signin() {
 
             {/* Contraseña */}
             <div className="mb-3">
-              <label htmlFor="password" className="form-label">Contraseña</label>
+              <label htmlFor="password" className="form-label">Nueva Contraseña</label>
+              <input
+                type="password"
+                className="form-control"
+                id="password"
+                placeholder="********"
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="password" className="form-label">Repetir Contraseña</label>
               <input
                 type="password"
                 className="form-control"

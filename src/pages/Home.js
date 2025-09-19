@@ -406,11 +406,11 @@ function Home() {
       <hr className="mx-auto my-4 w-80 border-top border-secondary" />
 
       {/*Sección Votación*/}
-      <div id="votacion" className="container my-5">
+      <div id="votacion" className="votacion-explicacion container my-5">
         <div className="row g-4">
           {/* Explicación de la lógica */}
-          <div className="col-lg-6">
-            <div className="card shadow-sm border-0 h-100">
+          <div className="col-lg-6 p-50">
+            <div className="votacion-explicacion-container card shadow-sm border-0 h-100">
               <div className="card-body">
                 <h2 className="titulo-votacion card-title mb-3">
                   Votación para el Menú del Día
@@ -589,6 +589,7 @@ function Home() {
         </div>
       </section>
 
+    {/*Boton de BackToTop*/}
       <a
         href="#hero"
         class="boton-top btn btn-primary"

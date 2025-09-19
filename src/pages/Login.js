@@ -4,8 +4,8 @@ function Login() {
   return (
     <>
     
-      <div className="login-contenedor container d-flex justify-content-center align-items-center vh-100">
-        <div className="card login shadow-lg p-4" style={{ maxWidth: "450px", width: "100%" }}>
+      <div className="login-contenedor container d-flex justify-content-center align-items-center mt-5 mb-5">
+        <div className="card login shadow-lg p-4" style={{ maxWidth: "450px", width: "90%" }}>
           {/* Título */}
           <div className="text-center mb-4">
             <h3 className="fw-bold text-dark">Iniciar Sesión</h3>
