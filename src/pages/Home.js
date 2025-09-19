@@ -43,7 +43,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.12.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -60,7 +61,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.12.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -77,7 +79,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.15.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -94,7 +97,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.17.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -111,7 +115,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.15.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -128,7 +133,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.12.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -145,7 +151,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.12.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -162,7 +169,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.17.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -179,7 +187,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.18.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -196,7 +205,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.18.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -213,7 +223,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.12.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -230,7 +241,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.15.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -247,7 +259,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.15.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -265,7 +278,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.15.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -283,7 +297,8 @@ function Home() {
                     <button type="button" className="btn btn-primary">
                       S/.10.00
                     </button>
-                    <button type="button" className="btn btn-success">
+                    <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success">
                       Reservar
                     </button>
                   </div>
@@ -293,7 +308,7 @@ function Home() {
           </div>
         </div>
       </section>
-
+      
       <hr className="mx-auto my-4 w-80 border-top border-secondary" />
 
       {/*Sección Menú del Día*/}
@@ -328,11 +343,57 @@ function Home() {
           </div>
 
           <div className="menu-price">Precio: s/.12.00</div>
-          <button type="button" className="btn btn-success">
+          <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalPlato" type="button" className="btn btn-success ">
             Reservar
           </button>
         </div>
       </div>
+
+      {/*Modal de Reserva Plato*/}
+            <div
+              className="modal fade"
+              id="confirmModalPlato"
+              tabIndex="-1"
+              aria-labelledby="confirmModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="confirmModalLabel">
+                      Confirmar acción
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    ¿Estás seguro de deseas reservar este plato?
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      data-bs-dismiss="modal"
+                    >
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
       <hr className="mx-auto my-4 w-80 border-top border-secondary" />
 
@@ -442,16 +503,67 @@ function Home() {
                     </div>
                   </label>
                 </div>
+                <div class="boton-votacion d-flex justify-content-center">
+                  <button data-bs-toggle="modal"
+                    data-bs-target="#confirmModalVotacion" type="button" className="btn btn-success">
+                    Votar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
+      {/*Modal de Reserva Votación*/}
+            <div
+              className="modal fade"
+              id="confirmModalVotacion"
+              tabIndex="-1"
+              aria-labelledby="confirmModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="confirmModalLabel">
+                      Confirmar acción
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    ¿Estás seguro de votar por estos platos?
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      data-bs-dismiss="modal"
+                    >
+                      Votar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
       {/*Sección Contacto*/}
       <section id="contacto" className="contacto">
         <div className="container">
-          <div className="container text-center rectangulo d-flex justify-conten-evenly">
+          <div className="container text-center rectangulo d-flex justify-content-evenly">
             <div className="row">
               <div className="col-12 col-md-4 seccion-titulo">Hablemos!</div>
               <div className="col-12 col-md-4 descripcion">

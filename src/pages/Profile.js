@@ -4,8 +4,7 @@ import "../App.css";
 
 function Perfil() {
   return (
-    <> 
-
+    <>
       <div className="container my-5">
         <h1 className="text-center seccion-titulo">Mi Perfil</h1>
         <div className="row g-4">
@@ -14,10 +13,18 @@ function Perfil() {
             <div className="card shadow-sm border-0">
               <div className="card-body">
                 <h4 className="perfil card-title">Información Personal</h4>
-                <p><strong>Nombre:</strong> Juan</p>
-                <p><strong>Apellido:</strong> Pérez</p>
-                <p><strong>Correo:</strong> juanperez@mail.com</p>
-                <p><strong>Teléfono:</strong> +51 987654321</p>
+                <p>
+                  <strong>Nombre:</strong> Juan
+                </p>
+                <p>
+                  <strong>Apellido:</strong> Pérez
+                </p>
+                <p>
+                  <strong>Correo:</strong> juanperez@mail.com
+                </p>
+                <p>
+                  <strong>Teléfono:</strong> +51 987654321
+                </p>
               </div>
             </div>
           </div>
@@ -31,6 +38,60 @@ function Perfil() {
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item">Lomo Saltado</li>
                 </ul>
+                <div class="boton-cancelar-pedido d-flex justify-content-center">
+                  <button
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirmModal"
+                    type="button"
+                    className="btn btn-danger mt-2"
+                  >
+                    Cancelar Pedido
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/*Modal Botono Cancelar*/}
+            <div
+              className="modal fade"
+              id="confirmModal"
+              tabIndex="-1"
+              aria-labelledby="confirmModalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="confirmModalLabel">
+                      Confirmar acción
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                    ¿Estás seguro de que deseas cancelar el pedido?
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      data-bs-dismiss="modal"
+                    >
+                      Confirmar
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -90,7 +151,6 @@ function Perfil() {
           </div>
         </div>
       </div>
-
     </>
   );
 }

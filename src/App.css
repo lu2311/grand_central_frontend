@@ -129,7 +129,7 @@ section {
   border-radius: 20px;
 }
 
-.btn-success {
+.iconos-contenedor .btn-success {
   border-radius: 20px;
 }
 
@@ -384,6 +384,14 @@ transition: transform 0.3s ease-in-out;
   margin-top: 10px;
   font-style: italic;
   color: #f5f6f7;
+}
+
+.boton-votacion button{
+  width: 90px;
+  font-size: 20px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  border-radius: 8px;
 }
 
 /*Contacto*/
