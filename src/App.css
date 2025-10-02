@@ -129,12 +129,24 @@ input[type="radio"] {
   border-radius: 20px;
 }
 
+.no-clickable{
+  cursor: auto !important;  
+}
+
+.no-clickable:hover{
+  background-color: #c97d1a !important;
+}
+
 .iconos-contenedor .btn-success {
   border-radius: 20px;
 }
 
 .btn-primary:hover {
   background-color: #b4721c;
+}
+
+.btn-primary:active {
+  background-color: #b4721c !important;
 }
 
 .iconos-contenedor button {
@@ -592,16 +604,22 @@ footer {
 }
 
 .login-wraper {
-  max-width: 400px; /* You can adjust this width */
+  max-width: 400px;
   width: 100%;
-  padding: 2rem; /* Add padding here to control internal space */
+  padding: 2rem;
 }
 
+.card .shadow-lg{
+  max-width: "500px";
+  width: "100%";
+}
 
 .card {
   border-radius: 10px;
   background-color: #fff;
 }
+
+
 
 .card-body h4 {
   border-bottom: 2px solid #b46a09;
@@ -686,3 +704,18 @@ footer {
   color: #fff !important;
   box-shadow: none !important;
 }
+
+/*Modal de Platos*/
+.modal-dialog img {
+  max-height: 250px;
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: all 0.2s ease;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+  outline-style: auto;
+  outline-color: #b46a09;
+}
+
