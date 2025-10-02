@@ -11,7 +11,7 @@ function Footer() {
 
         <div className="crear-cuenta text-center">
           <p className="footer-texto-sm">¿Aún no tienes una cuenta?</p>
-          <a href="/signin" className="boton-crear-cuenta">
+          <a href="/login" className="boton-crear-cuenta">
             Crear cuenta
           </a>
         </div>
