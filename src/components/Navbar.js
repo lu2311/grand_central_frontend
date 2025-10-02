@@ -1,7 +1,18 @@
 // src/components/Navbar.js
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 function Navbar() {
+
+  const [usuarioActivo, setUsuarioActivo] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("usuarioActual");
+    if (storedUser) {
+      setUsuarioActivo(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-md navbar-light">
       <div className="container-fluid">
@@ -40,14 +51,19 @@ function Navbar() {
             <li className="nav-item">
               <a className="nav-link" href="/#contacto">Contacto</a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/profile">Perfil</a>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">
-                Iniciar sesión <i className="bi bi-person-circle"></i>
-              </Link>
-            </li>
+            {usuarioActivo ? (
+              <li className="nav-item">
+                <Link className="nav-link" to="/profile">
+                  Mi Perfil <i className="bi bi-person-circle"></i>
+                </Link>
+              </li>
+            ) : (
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">
+                  Iniciar Sesión <i className="bi bi-box-arrow-in-right"></i>
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
