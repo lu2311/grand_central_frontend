@@ -22,13 +22,9 @@ section {
   padding: 15px 0;
 }
 
-.seccion-descripcion {
-  font-size: 1.2rem;
-  color: #584e4e;
-}
-
-.seccion-texto {
-  font-size: 1.2rem;
+input[type="radio"] {
+  accent-color: #ff9100;
+  width: 40px;
 }
 
 /*Barra de navegacion*/
@@ -105,6 +101,10 @@ section {
   font-weight: 700;
 }
 
+.platos .overlay p {
+    color: #666161;
+  }
+
 .platos-carta img {
   height: 100%;
   width: 100%;
@@ -129,12 +129,24 @@ section {
   border-radius: 20px;
 }
 
-.btn-success {
+.no-clickable{
+  cursor: auto !important;  
+}
+
+.no-clickable:hover{
+  background-color: #c97d1a !important;
+}
+
+.iconos-contenedor .btn-success {
   border-radius: 20px;
 }
 
 .btn-primary:hover {
   background-color: #b4721c;
+}
+
+.btn-primary:active {
+  background-color: #b4721c !important;
 }
 
 .iconos-contenedor button {
@@ -271,6 +283,10 @@ section {
   padding-bottom: 8px;
 }
 
+.votacion-explicacion .votacion-explicacion-container {
+  padding: 20px ;
+}
+
 .card-text {
   color: #333;
 }
@@ -384,6 +400,14 @@ transition: transform 0.3s ease-in-out;
   margin-top: 10px;
   font-style: italic;
   color: #f5f6f7;
+}
+
+.boton-votacion button{
+  width: 90px;
+  font-size: 20px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  border-radius: 8px;
 }
 
 /*Contacto*/
@@ -579,14 +603,23 @@ footer {
   width: 100%;
 }
 
-.signin-contenedor {
-  margin-top: 50px;
+.login-wraper {
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+}
+
+.card .shadow-lg{
+  max-width: "500px";
+  width: "100%";
 }
 
 .card {
   border-radius: 10px;
   background-color: #fff;
 }
+
+
 
 .card-body h4 {
   border-bottom: 2px solid #b46a09;
@@ -671,3 +704,18 @@ footer {
   color: #fff !important;
   box-shadow: none !important;
 }
+
+/*Modal de Platos*/
+.modal-dialog img {
+  max-height: 250px;
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: all 0.2s ease;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+  outline-style: auto;
+  outline-color: #b46a09;
+}
+
