@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { reservarPlato } from "../utils/reservations";
+import { reservarPlato } from "../utils/Reservations";
 
 function Dishes() {
   const [platos, setPlatos] = useState([]);
@@ -8,6 +8,7 @@ function Dishes() {
   const manejarReserva = (plato) => {
   setPlatoSeleccionado(plato);
   };
+
   const confirmarReserva = () => {
     if (platoSeleccionado) {
       reservarPlato({
