@@ -3,11 +3,15 @@ import Dishes from "../components/Dishes"
 import DayMenu from "../components/DayMenu";
 import Hero from "../components/Hero";
 import Votation from "../components/Votation";
+import NavBar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Home() {
 
   return (
     <>
+      <NavBar />
+
       {/*Sección Hero*/}
       <Hero />
 
@@ -56,6 +60,8 @@ function Home() {
       >
         <i class="bi bi-arrow-up"></i>
       </a>
+
+      <Footer />
     </>
   );
 }
