@@ -7,10 +7,10 @@ function Reservas() {
   useEffect(() => {
     const data = getUsers();
     const reservasData = data
-      .filter((u) => u.platoReservado && u.platoReservado.nombre)
+      .filter((u) => u.platoReservado && (u.platoReservado.nombre || u.platoReservado.fondo))
       .map((u, index) => ({
         id: index + 1,
-        nombre: u.platoReservado.nombre,
+        nombre: u.platoReservado.nombre || u.platoReservado.fondo,
         precio:u.platoReservado.precio,        
         cantidad: 1,
       }));

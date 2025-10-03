@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { reservarPlato } from "../utils/reservations";
 
 function Dishes() {
+  const [platos, setPlatos] = useState([]);
   const [platoSeleccionado, setPlatoSeleccionado] = useState(null);
+  
   const manejarReserva = (plato) => {
   setPlatoSeleccionado(plato);
   };
@@ -16,26 +18,21 @@ function Dishes() {
       });
     }
   };
+
+  useEffect(() => {
+      const data = localStorage.getItem("platos");
+      try {
+        if (data) {
+          setPlatos(JSON.parse(data));
+        } else {
+          setPlatos([]);
+        }
+      } catch (e) {
+        console.error("Error al leer platos del localStorage:", e);
+        setPlatos([]);
+      }
+    }, []);
   
-  
-  // Array de platos
-  const platos = [
-    { nombre: "Lomo Saltado", imagen: "../img/lomo-saltado.jpg", precio: "12.00" },
-    { nombre: "Tallarín Saltado", imagen: "../img/tallarin-saltado.webp", precio: "12.00" },
-    { nombre: "Bisteck a lo Pobre", imagen: "../img/bistec-a-lo-pobre.jpg", precio: "15.00" },
-    { nombre: "Churrasco con Papas Doradas", imagen: "../img/churrasco-papas.png", precio: "17.00" },
-    { nombre: "Chuleta con Papas Doradas", imagen: "../img/chuleta-papas.jpeg", precio: "15.00" },
-    { nombre: "Chaufa Amazónico", imagen: "../img/chaufa-amazonico", precio: "12.00" },
-    { nombre: "Chaufa de Pollo", imagen: "../img/chaufa-pollo.jpg", precio: "12.00" },
-    { nombre: "Filete de Pollo con Champiñones", imagen: "../img/pollo-champinones.jpg", precio: "17.00" },
-    { nombre: "Spaghetti a la Huancaína con Lomo Saltado", imagen: "../img/spaghetti-huancaina-lomo.jpg", precio: "18.00" },
-    { nombre: "Spaghetti en Salsa de Hongos", imagen: "../img/spaghetti-hongos.jpg", precio: "18.00" },
-    { nombre: "Spaguetti a lo Alfredo", imagen: "../img/spaghetti-alfredo.jpeg", precio: "12.00" },
-    { nombre: "Alitas B.B.Q.", imagen: "../img/alitas-b.b.q..jpg", precio: "15.00" },
-    { nombre: "Alitas Búfalo", imagen: "../img/alitas-buffalo.jpg", precio: "15.00" },
-    { nombre: "Cordon Bleu en Salsa Bechamel", imagen: "../img/cordon-bleu.webp", precio: "15.00" },
-    { nombre: "Arroz a la Cubana", imagen: "../img/arroz-cubana.webp", precio: "10.00" },
-  ];
   return (
     <section id="platos" className="platos-carta d-flex flex-column">
       <h2 className="seccion-titulo">Platos a la Carta</h2>

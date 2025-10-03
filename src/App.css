@@ -719,3 +719,39 @@ footer {
   outline-color: #b46a09;
 }
 
+/*Administrador*/
+
+/*Admin*/
+.admin-wrapper{
+  min-height: "100vh";
+}
+
+.admin-content{
+  background-color: #f8f9fa;
+}
+
+.admin-logo{
+  width: 200px;
+}
+
+/*Sidebar*/
+.admin-sidebar{
+  width: 250px;
+  min-height: 100vh;  
+}
+
+.admin-subtitulo{
+  text-align: center;
+  font-size: 3em;
+  text-decoration: underline;
+}
+
+.admin-sidebar button{
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.admin-sidebar button:hover{
+  background-color: #949494;
+  border-color: #949494;
+}

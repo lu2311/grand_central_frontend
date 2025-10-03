@@ -48,7 +48,7 @@ function Usuarios() {
                   <td>{index + 1}</td>
                   <td>{u.nombre}</td>
                   <td>{u.correo}</td>
-                  <td>{u.platoReservado?.nombre || "N/A"}</td>
+                  <td>{u.platoReservado?.nombre || u.platoReservado?.fondo || "N/A"}</td>
                   <td>{u.votacion?.entrada || "N/A"} y {u.votacion?.fondo || "N/A"}</td>
                 </tr>
               ))
