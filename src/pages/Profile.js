@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { getUsuarioActual, cancelarReserva } from "../utils/reservations";
 import "../App.css";
+  import NavBar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -56,6 +58,9 @@ function Profile() {
   };
 
   return (
+    <>
+    <NavBar />
+
     <div className="container my-5">
       <h1 className="text-center seccion-titulo">Mi Perfil</h1>
       <div className="row g-4">
@@ -235,6 +240,9 @@ function Profile() {
         </div>
       </div>
     </div>
+
+    <Footer />
+    </>
   );
 }
 

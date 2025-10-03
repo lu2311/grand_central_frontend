@@ -1,6 +1,8 @@
   import { useState } from "react";
   import "../App.css";
   import { getUsers, addUser } from "../utils/Users";
+  import NavBar from "../components/Navbar";
+import Footer from "../components/Footer";
 
   function Login() {
     const [isLogin, setIsLogin] = useState(true);
@@ -9,6 +11,17 @@
       e.preventDefault();
       const correo = e.target.correo.value;
       const password = e.target.password.value;
+
+
+    if (correo === "admin@admin.com" && password === "admin") {
+      alert("Bienvenido Administrador");
+      localStorage.setItem(
+        "usuarioActual",
+        JSON.stringify({ nombre: "Admin", correo, rol: "admin" })
+      );
+      window.location.href = "/admin";
+      return;
+    }
 
       const users = getUsers();
       const user = users.find((u) => u.correo === correo && u.password === password);
@@ -44,6 +57,9 @@
     };
 
     return (
+<>
+      <NavBar />
+
       <div className="auth-container container d-flex justify-content-center align-items-center mt-5 mb-5">
         <div className="card shadow-lg p-4">
           <div className="text-center mb-4">
@@ -126,6 +142,9 @@
           </div>
         </div>
       </div>
+
+      <Footer />
+      </>
     );
   }
 
