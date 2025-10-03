@@ -1,62 +1,44 @@
 import { useState, useEffect } from "react";
-import { getUsers } from "../../utils/Users";
+import { getVotaciones, getVotacionDelDia } from "../../utils/Votations";
+import VotationsHistory from "./VotationsHistory";
+import VotationsResults from "./VotationsResults";
 
-function Votaciones() {
+function AdminVoting() {
+  const [activeTab, setActiveTab] = useState("historial");
   const [votaciones, setVotaciones] = useState([]);
+  const [votacionHoy, setVotacionHoy] = useState(null);
 
   useEffect(() => {
-    const data = getUsers();
-    const today = new Date().toLocaleDateString("es-PE");
-
-    const votosData = data
-      .filter((u) => u.votacion && (u.votacion.entrada || u.votacion.fondo))
-      .map((u, index) => ({
-        id: index + 1,
-        nombre: u.nombre,
-        voto: `${u.votacion.entrada || "N/A"} / ${u.votacion.fondo || "N/A"}`,
-        fecha: today,
-      }));
-
-    setVotaciones(votosData);
+    setVotaciones(getVotaciones());
+    setVotacionHoy(getVotacionDelDia());
   }, []);
 
   return (
     <div>
-      <h2 className="admin-subtitulo mb-4">Votaciones</h2>
+      <h2 className="admin-subtitulo mb-4">Administrar Votaciones</h2>
 
-      {/* Tabla */}
-      <div className="table-responsive">
-        <table className="table table-striped table-bordered shadow-sm">
-          <thead className="table-dark">
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Voto</th>
-              <th>Fecha</th>
-            </tr>
-          </thead>
-          <tbody>
-            {votaciones.length > 0 ? (
-              votaciones.map((v) => (
-                <tr key={v.id}>
-                  <td>{v.id}</td>
-                  <td>{v.nombre}</td>
-                  <td>{v.voto}</td>
-                  <td>{v.fecha}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="4" className="text-center text-muted">
-                  No hay votaciones registradas
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+      {/* Tabs */}
+      <div className="d-flex mb-3">
+        <button
+          className={`flex-fill btn ${activeTab === "historial" ? "btn-dark" : "btn-outline-dark"}`}
+          onClick={() => setActiveTab("historial")}
+        >
+          Historial
+        </button>
+        <button
+          className={`flex-fill btn ${activeTab === "resultados" ? "btn-dark" : "btn-outline-dark"}`}
+          onClick={() => setActiveTab("resultados")}
+        >
+          Resultados
+        </button>
       </div>
+
+      {activeTab === "historial" && (
+        <VotationsHistory votaciones={votaciones} setVotaciones={setVotaciones} setVotacionHoy={setVotacionHoy} />
+      )}
+      {activeTab === "resultados" && votacionHoy && <VotationsResults votacionHoy={votacionHoy} />}
     </div>
   );
 }
 
-export default Votaciones;
+export default AdminVoting;

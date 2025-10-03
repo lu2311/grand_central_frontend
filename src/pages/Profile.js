@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getUsuarioActual, cancelarReserva } from "../utils/reservations";
+import { getUsuarioActual, cancelarReserva } from "../utils/Reservations";
 import "../App.css";
   import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";

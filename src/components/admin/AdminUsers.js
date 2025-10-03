@@ -20,14 +20,19 @@ function Usuarios() {
     <div>
       <h2 className="admin-subtitulo mb-4">Usuarios</h2>
 
-      {/* Buscador */}
-      <input
-        type="text"
-        className="form-control mb-3"
-        placeholder="Buscar por nombre o correo..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {/* -------- Buscador -------- */}
+      <div className="input-group mb-3">
+        <span className="btn btn-primary">
+          <i className="bi bi-search"></i>
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Buscar por nombre o correo..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
 
       {/* Tabla */}
       <div className="table-responsive">

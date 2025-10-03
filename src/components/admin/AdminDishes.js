@@ -4,6 +4,7 @@ function Platos() {
   const [platos, setPlatos] = useState([]);
   const [formData, setFormData] = useState({ nombre: "", precio: "", imagen: "" });
   const [editId, setEditId] = useState(null);
+  const [search, setSearch] = useState("");
 
   /* -------- Lógica LocalStorage -------- */
   useEffect(() => {
@@ -70,10 +71,27 @@ function Platos() {
     setFormData(plato);
   };
 
+  const filteredPlatos = platos.filter((p) =>
+    p.nombre.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div>
       <h2 className="admin-subtitulo mb-4">Platos</h2>
 
+      {/* -------- Buscador -------- */}
+      <div className="input-group mb-3">
+        <span className="btn btn-primary">
+          <i className="bi bi-search"></i>
+        </span>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Buscar por nombre"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
       {/* -------- Formulario -------- */}
       <div className="mb-4 p-3 border rounded bg-light shadow-sm">
         <h3 className="mb-3">{editId ? "Editar Plato" : "Agregar Nuevo Plato"}</h3>
@@ -127,8 +145,8 @@ function Platos() {
             </tr>
           </thead>
           <tbody>
-            {platos.length > 0 ? (
-              platos.map((p) => (
+            {filteredPlatos.length > 0 ? (
+              filteredPlatos.map((p) => (
                 <tr key={p.id}>
                   <td>{p.nombre}</td>
                   <td>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { reservarPlato } from "../utils/reservations";
+import { reservarPlato } from "../utils/Reservations";
 
 function DayMenu() {
   const [entradaSeleccionada, setEntradaSeleccionada] = useState("");

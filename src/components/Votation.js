@@ -1,52 +1,51 @@
-// src/components/Votation.jsx
-import React, { useState } from "react";
-import { getUsuarioActual, setUsuarioActual } from "../utils/reservations";
+import React, { useState, useEffect } from "react";
+import { getUsuarioActual, setUsuarioActual } from "../utils/Reservations";
+import { getVotacionDelDia, registrarVoto } from "../utils/Votations";
 
 const Votation = () => {
-  // Array con las opciones de entradas
-  const entradas = [
-    { id: 1, nombre: "Causa", porcentaje: 17 },
-    { id: 2, nombre: "Ensalada Blanca", porcentaje: 17 },
-    { id: 3, nombre: "Papa a la Huancaína", porcentaje: 17 },
-  ];
-
-  // Array con las opciones de fondos
-  const fondos = [
-    { id: 1, nombre: "Seco de Carne", porcentaje: 17 },
-    { id: 2, nombre: "Carapulcra", porcentaje: 17 },
-    { id: 3, nombre: "Cau Cau", porcentaje: 17 },
-  ];
-
-  // Estados para guardar las selecciones
+  const [votacion, setVotacion] = useState(null);
   const [entradaSeleccionada, setEntradaSeleccionada] = useState(null);
   const [fondoSeleccionado, setFondoSeleccionado] = useState(null);
 
-  // Buscar nombres de los seleccionados
-  const entradaNombre = entradas.find((e) => e.id === entradaSeleccionada)?.nombre;
-  const fondoNombre = fondos.find((f) => f.id === fondoSeleccionado)?.nombre;
+  useEffect(() => {
+    setVotacion(getVotacionDelDia());
+  }, []);
 
-  // Guardar voto en usuarioActual (localStorage)
+  if (!votacion) {
+    return <h2 className="text-center mt-5">No hay votación creada para hoy</h2>;
+  }
+
   const handleVotar = () => {
-    const usuario = getUsuarioActual();
-    if (!usuario) {
-      alert("Debes iniciar sesión para votar");
-      return;
-    }
+  const usuario = getUsuarioActual();
+  if (!usuario) {
+    alert("Debes iniciar sesión para votar");
+    return;
+  }
 
-    if (!entradaNombre || !fondoNombre) {
-      alert("Debes seleccionar una entrada y un fondo");
-      return;
-    }
+  const hoy = new Date().toLocaleDateString("es-PE");
 
-    usuario.votacion = {
-      entrada: entradaNombre,
-      fondo: fondoNombre,
-    };
+  // Verificamos si ya votó HOY
+  if (usuario.votacion && usuario.votacion.fecha === hoy) {
+    alert("Ya realizaste tu votación de hoy ✅");
+    return;
+  }
 
-    setUsuarioActual(usuario);
-    alert(`Tu voto se guardó: ${entradaNombre} y ${fondoNombre}`);
+  if (!entradaSeleccionada || !fondoSeleccionado) {
+    alert("Debes seleccionar una entrada y un fondo");
+    return;
+  }
+
+  usuario.votacion = {
+    fecha: hoy,
+    entrada: votacion.entradas.find(e => e.id === entradaSeleccionada)?.nombre,
+    fondo: votacion.fondos.find(f => f.id === fondoSeleccionado)?.nombre,
   };
+  setUsuarioActual(usuario);
 
+  registrarVoto(entradaSeleccionada, fondoSeleccionado);
+
+  alert(`Tu voto se guardó: ${usuario.votacion.entrada} y ${usuario.votacion.fondo}`);
+};
   return (
     <>
       {/* Sección Votación */}
@@ -91,7 +90,7 @@ const Votation = () => {
                   Votación de Entradas
                 </h2>
                 <div className="votacion-entrada">
-                  {entradas.map((entrada) => (
+                  {votacion.entradas.map((entrada) => (
                     <label className="entrada" key={entrada.id}>
                       <div className="nombre-entrada">{entrada.nombre}</div>
                       <div className="barra-resultado">
@@ -119,7 +118,7 @@ const Votation = () => {
                   Votación de Fondos
                 </h2>
                 <div className="votacion-fondo">
-                  {fondos.map((fondo) => (
+                  {votacion.fondos.map((fondo) => (
                     <label className="fondo" key={fondo.id}>
                       <div className="nombre-fondo">{fondo.nombre}</div>
                       <div className="barra-resultado">
@@ -179,10 +178,10 @@ const Votation = () => {
               ></button>
             </div>
             <div className="modal-body">
-              {entradaNombre && fondoNombre ? (
+              {votacion.entradaNombre && votacion.fondoNombre ? (
                 <>
-                  Vas a votar por <strong>{entradaNombre}</strong> como entrada y{" "}
-                  <strong>{fondoNombre}</strong> como fondo.
+                  Vas a votar por <strong>{votacion.entradaNombre}</strong> como entrada y{" "}
+                  <strong>{votacion.fondoNombre}</strong> como fondo.
                 </>
               ) : (
                 "Debes seleccionar una entrada y un fondo antes de votar."
