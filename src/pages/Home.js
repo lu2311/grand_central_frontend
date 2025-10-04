@@ -1,7 +1,7 @@
 import "../App.css";
 import Dishes from "../components/Dishes"
 import DayMenu from "../components/DayMenu";
-import Hero from "../components/Hero";
+import Options from "../components/Options";
 import Votation from "../components/Votation";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -12,8 +12,8 @@ function Home() {
     <>
       <NavBar />
 
-      {/*Sección Hero*/}
-      <Hero />
+      {/*Sección Options*/}
+      <Options />
 
       {/*Sección Platos*/}
       <Dishes />
