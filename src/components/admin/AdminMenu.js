@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Swal from 'sweetalert2';
 
 function Menu() {
   const [menu, setMenu] = useState([]);
@@ -38,7 +39,7 @@ function Menu() {
   };
 
   const handleEdit = (id) => {
-    alert(`Editar ítem de menú con id: ${id}`);
+    Swal.fire(`Editar ítem de menú con id: ${id}`);
   };
 
   return (

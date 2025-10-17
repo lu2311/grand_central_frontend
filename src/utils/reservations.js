@@ -1,4 +1,5 @@
 import { updateUser } from "./Users";
+import Swal from 'sweetalert2';
 
 // Obtener usuario activo desde localStorage
 export function getUsuarioActual() {
@@ -25,25 +26,37 @@ export function cancelarReserva() {
 export function reservarPlato(plato) {
   const usuario = getUsuarioActual();
   if (!usuario) {
-    alert("Debes iniciar sesión para reservar un plato");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Debes iniciar sesión para reservar un plato"
+    });
     return;
   }
 
   if (usuario.platoReservado) {
-    alert("Ya tienes un plato reservado. Solo puedes elegir uno.");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Ya tienes un plato reservado. Solo puedes elegir uno."
+    });
     return;
   }
 
   usuario.platoReservado = plato;
   setUsuarioActual(usuario);
-  alert(`Has reservado: ${plato.nombre || plato.fondo || plato}`);
+  Swal.fire(`Has reservado: ${plato.nombre || plato.fondo || plato}`);
 }
 
 // Guardar votación del usuario
 export function guardarVotacion(valor) {
   const usuario = getUsuarioActual();
   if (!usuario) {
-    alert("Debes iniciar sesión para votar");
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Debes iniciar sesión para votar"
+    });
     return;
   }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUsuarioActual, setUsuarioActual } from "../utils/Reservations";
 import { getVotacionDelDia, registrarVoto } from "../utils/Votations";
+import Swal from 'sweetalert2';
 
 const Votation = () => {
   const [votacion, setVotacion] = useState(null);
@@ -18,7 +19,11 @@ const Votation = () => {
   const handleVotar = () => {
   const usuario = getUsuarioActual();
   if (!usuario) {
-    alert("Debes iniciar sesión para votar");
+    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Debes iniciar sesión para votar"
+                      });
     return;
   }
 
@@ -26,12 +31,20 @@ const Votation = () => {
 
   // Verificamos si ya votó HOY
   if (usuario.votacion && usuario.votacion.fecha === hoy) {
-    alert("Ya realizaste tu votación de hoy ✅");
+    Swal.fire({
+      title: "Exito",
+      text: "Ya realizaste tu votación de hoy",
+      icon: "success"
+    });
     return;
   }
 
   if (!entradaSeleccionada || !fondoSeleccionado) {
-    alert("Debes seleccionar una entrada y un fondo");
+    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Debes seleccionar una entrada y un fondo"
+                      });
     return;
   }
 
@@ -44,7 +57,8 @@ const Votation = () => {
 
   registrarVoto(entradaSeleccionada, fondoSeleccionado);
 
-  alert(`Tu voto se guardó: ${usuario.votacion.entrada} y ${usuario.votacion.fondo}`);
+  Swal.fire(`Tu voto se guardó: ${usuario.votacion.entrada} y ${usuario.votacion.fondo}`);
+
 };
   return (
     <>

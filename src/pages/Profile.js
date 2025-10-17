@@ -3,6 +3,7 @@ import { getUsuarioActual, cancelarReserva } from "../utils/Reservations";
 import "../App.css";
   import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Swal from 'sweetalert2';
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -26,20 +27,28 @@ function Profile() {
   const handleSorteo = (e) => {
     e.preventDefault();
     if (codigo.trim() === "") {
-      alert("Debes ingresar un código.");
+      Swal.fire({
+                      icon: "error",
+                      title: "Error",
+                      text: "Debes ingresar un código."
+                  });
       return;
     }
-    alert(`Código enviado: ${codigo}`);
+    Swal.fire(`Código enviado: ${codigo}`);
     setCodigo("");
   };
 
   const handleSugerencia = (e) => {
     e.preventDefault();
     if (sugerencia.trim() === "") {
-      alert("Por favor escribe una sugerencia.");
+      Swal.fire({
+                      icon: "error",
+                      title: "Error",
+                      text: "Por favor escribe una sugerencia."
+                  });
       return;
     }
-    alert(`Gracias por tu sugerencia: ${sugerencia}`);
+        Swal.fire(`Gracias por tu sugerencia: ${sugerencia}`);
     setSugerencia("");
   };
 

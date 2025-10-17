@@ -1,20 +1,21 @@
-  import { useState } from "react";
-  import "../App.css";
-  import { getUsers, addUser } from "../utils/Users";
-  import NavBar from "../components/Navbar";
+import { useState } from "react";
+import "../App.css";
+import { getUsers, addUser } from "../utils/Users";
+import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
+import Swal from 'sweetalert2';
 
-  function Login() {
-    const [isLogin, setIsLogin] = useState(true);
+function Login() {
+  const [isLogin, setIsLogin] = useState(true);
 
-    const handleLogin = (e) => {
-      e.preventDefault();
-      const correo = e.target.correo.value;
-      const password = e.target.password.value;
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const correo = e.target.correo.value;
+    const password = e.target.password.value;
 
 
     if (correo === "admin@admin.com" && password === "admin") {
-      alert("Bienvenido Administrador");
+      Swal.fire("Bienvenido Administrador");
       localStorage.setItem(
         "usuarioActual",
         JSON.stringify({ nombre: "Admin", correo, rol: "admin" })
@@ -23,41 +24,54 @@ import Footer from "../components/Footer";
       return;
     }
 
-      const users = getUsers();
-      const user = users.find((u) => u.correo === correo && u.password === password);
+    const users = getUsers();
+    const user = users.find((u) => u.correo === correo && u.password === password);
 
-      if (user) {
-        alert(`Bienvenido ${user.nombre}`);
-        localStorage.setItem("usuarioActual", JSON.stringify(user));
-        window.location.href = "/profile";
-      } else {
-        alert("Correo o contraseña incorrectos");
-      }
-    };
+    if (user) {
+      Swal.fire(`Bienvenido ${user.nombre}`);
+      localStorage.setItem("usuarioActual", JSON.stringify(user));
+      window.location.href = "/profile";
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Correo o contraseña incorrectos"
+      });
+    }
+  };
 
-    const handleSignup = (e) => {
-      e.preventDefault();
-      const nombre = e.target.nombre.value;
-      const apellido = e.target.apellido.value;
-      const correo = e.target.correo.value;
-      const password = e.target.password.value;
-      const repeatPassword = e.target.repeatPassword.value;
+  const handleSignup = (e) => {
+    e.preventDefault();
+    const nombre = e.target.nombre.value;
+    const apellido = e.target.apellido.value;
+    const correo = e.target.correo.value;
+    const password = e.target.password.value;
+    const repeatPassword = e.target.repeatPassword.value;
 
-      if (password !== repeatPassword) {
-        alert("Las contraseñas no coinciden");
-        return;
-      }
+    if (password !== repeatPassword) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Las contraseñas no coinciden"
+      });
 
-      const newUser = { nombre, apellido, correo, password };
-      addUser(newUser);
+      return;
+    }
 
-      alert("Usuario registrado con éxito");
-      setIsLogin(true);
-      e.target.reset();
-    };
+    const newUser = { nombre, apellido, correo, password };
+    addUser(newUser);
 
-    return (
-<>
+    Swal.fire({
+                    title: "Éxito",
+                    text: "Usuario registrado con éxito",
+                    icon: "success"
+                });
+    setIsLogin(true);
+    e.target.reset();
+  };
+
+  return (
+    <>
       <NavBar />
 
       <div className="auth-container container d-flex justify-content-center align-items-center mt-5 mb-5">
@@ -144,8 +158,8 @@ import Footer from "../components/Footer";
       </div>
 
       <Footer />
-      </>
-    );
-  }
+    </>
+  );
+}
 
-  export default Login;
+export default Login;

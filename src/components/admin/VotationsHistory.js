@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getVotaciones, crearVotacion } from "../../utils/Votations";
+import Swal from 'sweetalert2';
 
 function VotationsHistory({ votaciones, setVotaciones, setVotacionHoy }) {
     const [showModal, setShowModal] = useState(false);
@@ -11,7 +12,11 @@ function VotationsHistory({ votaciones, setVotaciones, setVotacionHoy }) {
         const fondosValidos = fondos.filter(f => f.trim() !== "");
 
         if (entradasValidas.length < 3 || fondosValidos.length < 3) {
-            alert("Debes ingresar al menos 3 entradas y 3 fondos");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Debes ingresar al menos 3 entradas y 3 fondos"
+            });
             return;
         }
 
@@ -27,14 +32,22 @@ function VotationsHistory({ votaciones, setVotaciones, setVotacionHoy }) {
         const nueva = crearVotacion(objEntradas, objFondos);
 
         if (nueva) {
-            alert("Votación creada para hoy ✅");
+            Swal.fire({
+                title: "Éxito",
+                text: "Votación creada para hoy",
+                icon: "success"
+            });
             setVotaciones(getVotaciones());
             setVotacionHoy(nueva);
             setShowModal(false);
             setEntradas(["", "", ""]);
             setFondos(["", "", ""]);
         } else {
-            alert("Ya existe una votación para hoy ❌");
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Ya existe una votación para hoy"
+            });
         }
     };
 

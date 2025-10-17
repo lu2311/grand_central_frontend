@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 
 function Platos() {
   const [platos, setPlatos] = useState([]);
@@ -16,7 +17,11 @@ function Platos() {
         setPlatos([]);
       }
     } catch (e) {
-      console.error("Error al leer platos del localStorage:", e);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: ("Error al leer platos del localStorage:", e)
+      });
       setPlatos([]);
     }
   }, []);
@@ -52,7 +57,11 @@ function Platos() {
 
   const handleSave = () => {
     if (!formData.nombre || !formData.precio || !formData.imagen) {
-      alert("Todos los campos son obligatorios");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Todos los campos son obligatorios"
+      });
       return;
     }
 

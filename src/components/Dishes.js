@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { reservarPlato } from "../utils/Reservations";
+import Swal from 'sweetalert2';
 
 function Dishes() {
   const [platos, setPlatos] = useState([]);
@@ -29,7 +30,11 @@ function Dishes() {
           setPlatos([]);
         }
       } catch (e) {
-        console.error("Error al leer platos del localStorage:", e);
+        Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: ("Error al leer platos del localStorage:", e)
+              });
         setPlatos([]);
       }
     }, []);
