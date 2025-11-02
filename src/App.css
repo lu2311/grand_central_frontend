@@ -323,13 +323,12 @@ input[type="radio"] {
 
 .entrada {
   background-color: #1c1c1c;
-  height: 150px;
   padding: 10px;
   border: 1px solid #444;
   width: 180px;
   border-radius: 5px;
   position: relative;
-  transition: transform 0.3s ease-in-out;
+transition: transform 0.3s ease-in-out;
 }
 
 .entrada:hover {
@@ -391,6 +390,8 @@ input[type="radio"] {
   position: relative;
 transition: transform 0.3s ease-in-out;
 }
+
+
 
 .fondo:hover {
   transform: translateY(-10px);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getUsuarioActual, setUsuarioActual } from "../utils/Reservations";
 import { getVotacionDelDia, registrarVoto } from "../utils/Votations";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const Votation = () => {
   const [votacion, setVotacion] = useState(null);
@@ -13,53 +13,57 @@ const Votation = () => {
   }, []);
 
   if (!votacion) {
-    return <h2 className="text-center mt-5">No hay votación creada para hoy</h2>;
+    return (
+      <h2 className="text-center mt-5">No hay votación creada para hoy</h2>
+    );
   }
 
   const handleVotar = () => {
-  const usuario = getUsuarioActual();
-  if (!usuario) {
-    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: "Debes iniciar sesión para votar"
-                      });
-    return;
-  }
+    const usuario = getUsuarioActual();
+    if (!usuario) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Debes iniciar sesión para votar",
+      });
+      return;
+    }
 
-  const hoy = new Date().toLocaleDateString("es-PE");
+    const hoy = new Date().toLocaleDateString("es-PE");
 
-  // Verificamos si ya votó HOY
-  if (usuario.votacion && usuario.votacion.fecha === hoy) {
-    Swal.fire({
-      title: "Exito",
-      text: "Ya realizaste tu votación de hoy",
-      icon: "success"
-    });
-    return;
-  }
+    // Verificamos si ya votó HOY
+    if (usuario.votacion && usuario.votacion.fecha === hoy) {
+      Swal.fire({
+        title: "Exito",
+        text: "Ya realizaste tu votación de hoy",
+        icon: "success",
+      });
+      return;
+    }
 
-  if (!entradaSeleccionada || !fondoSeleccionado) {
-    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: "Debes seleccionar una entrada y un fondo"
-                      });
-    return;
-  }
+    if (!entradaSeleccionada || !fondoSeleccionado) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Debes seleccionar una entrada y un fondo",
+      });
+      return;
+    }
 
-  usuario.votacion = {
-    fecha: hoy,
-    entrada: votacion.entradas.find(e => e.id === entradaSeleccionada)?.nombre,
-    fondo: votacion.fondos.find(f => f.id === fondoSeleccionado)?.nombre,
+    usuario.votacion = {
+      fecha: hoy,
+      entrada: votacion.entradas.find((e) => e.id === entradaSeleccionada)
+        ?.nombre,
+      fondo: votacion.fondos.find((f) => f.id === fondoSeleccionado)?.nombre,
+    };
+    setUsuarioActual(usuario);
+
+    registrarVoto(entradaSeleccionada, fondoSeleccionado);
+
+    Swal.fire(
+      `Tu voto se guardó: ${usuario.votacion.entrada} y ${usuario.votacion.fondo}`
+    );
   };
-  setUsuarioActual(usuario);
-
-  registrarVoto(entradaSeleccionada, fondoSeleccionado);
-
-  Swal.fire(`Tu voto se guardó: ${usuario.votacion.entrada} y ${usuario.votacion.fondo}`);
-
-};
   return (
     <>
       {/* Sección Votación */}
@@ -107,15 +111,21 @@ const Votation = () => {
                   {votacion.entradas.map((entrada) => (
                     <label className="entrada" key={entrada.id}>
                       <div className="nombre-entrada">{entrada.nombre}</div>
+                      <div className="imagen-entrada text-center my-2">
+        <img
+          src={entrada.imagen || "https://imgs.search.brave.com/L35xuY9rLpgS4Fh-6AD4abs8X9S_AKzxuMeG3ccOkrE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA3LzkxLzIyLzU5/LzM2MF9GXzc5MTIy/NTkyNl9NVUVQdWtv/MHhnakt2V2VBSEdQ/ZEVyUUhZNlgyWkox/bS5qcGc"}
+          alt={`Imagen de ${entrada.nombre}`}
+          className="img-fluid rounded"
+          style={{ maxHeight: "120px", objectFit: "cover" }}
+        />
+      </div>
                       <div className="barra-resultado">
                         <div
                           className="relleno"
                           style={{ width: `${entrada.porcentaje}%` }}
                         ></div>
                       </div>
-                      <div className="porcentaje">
-                        {entrada.porcentaje}%
-                      </div>
+                      <div className="porcentaje">{entrada.porcentaje}%</div>
                       <div className="checkbox-container">
                         <input
                           type="radio"
@@ -135,6 +145,14 @@ const Votation = () => {
                   {votacion.fondos.map((fondo) => (
                     <label className="fondo" key={fondo.id}>
                       <div className="nombre-fondo">{fondo.nombre}</div>
+                      <div className="imagen-fondo text-center my-2">
+                        <img
+                          src={fondo.imagen || "https://imgs.search.brave.com/L35xuY9rLpgS4Fh-6AD4abs8X9S_AKzxuMeG3ccOkrE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA3LzkxLzIyLzU5/LzM2MF9GXzc5MTIy/NTkyNl9NVUVQdWtv/MHhnakt2V2VBSEdQ/ZEVyUUhZNlgyWkox/bS5qcGc"}
+                          alt={`Imagen de ${fondo.nombre}`}
+                          className="img-fluid rounded"
+                          style={{ maxHeight: "120px", objectFit: "cover" }}
+                        />
+                      </div>
                       <div className="barra-resultado">
                         <div
                           className="relleno"
@@ -194,8 +212,8 @@ const Votation = () => {
             <div className="modal-body">
               {votacion.entradaNombre && votacion.fondoNombre ? (
                 <>
-                  Vas a votar por <strong>{votacion.entradaNombre}</strong> como entrada y{" "}
-                  <strong>{votacion.fondoNombre}</strong> como fondo.
+                  Vas a votar por <strong>{votacion.entradaNombre}</strong> como
+                  entrada y <strong>{votacion.fondoNombre}</strong> como fondo.
                 </>
               ) : (
                 "Debes seleccionar una entrada y un fondo antes de votar."
