@@ -64,7 +64,7 @@ function Dishes() {
 
   return (
     <section id="platos" className="platos-carta d-flex flex-column">
-      <h2 className="seccion-titulo">Platos a la Cartaaa</h2>
+      <h2 className="seccion-titulo">Platos a la Cartita</h2>
       <div className="container text-center platos-contenedor">
         <div className="row">
           {platos.length > 0 ? (
