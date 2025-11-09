@@ -1,26 +1,33 @@
-import { useState, useEffect } from "react";
-import { getUsers } from "../../utils/Users";
+import { useEffect, useState } from "react";
+import API from "../../utils/Api";
 
 function Usuarios() {
   const [search, setSearch] = useState("");
   const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    const data = getUsers();
-    setUsuarios(data);
+    const fetchUsuarios = async () => {
+      try {
+        const res = await API.get("/usuarios");
+        setUsuarios(res.data);
+      } catch (error) {
+        console.error("Error al cargar usuarios:", error);
+      }
+    };
+    fetchUsuarios();
   }, []);
 
   const filtered = usuarios.filter(
     (u) =>
-      u.nombre.toLowerCase().includes(search.toLowerCase()) ||
-      u.correo.toLowerCase().includes(search.toLowerCase())
+      u.nombre?.toLowerCase().includes(search.toLowerCase()) ||
+      u.correo?.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <div>
       <h2 className="admin-subtitulo mb-4">Usuarios</h2>
 
-      {/* -------- Buscador -------- */}
+      {/* Buscador */}
       <div className="input-group mb-3">
         <span className="btn btn-primary">
           <i className="bi bi-search"></i>
@@ -49,12 +56,18 @@ function Usuarios() {
           <tbody>
             {filtered.length > 0 ? (
               filtered.map((u, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
+                <tr key={u.id || index}>
+                  <td>{u.id}</td>
                   <td>{u.nombre}</td>
                   <td>{u.correo}</td>
-                  <td>{u.platoReservado?.nombre || u.platoReservado?.fondo || "Sin reserva"}</td>
-                  <td>{u.votacion?.entrada || "Sin "} {u.votacion?.fondo || "voto"}</td>
+                  <td>
+  {u.reservas && u.reservas.length > 0
+    ? u.reservas.map((r) => r.plato?.nombre).join(", ")
+    : "Sin reserva"}
+</td>
+                  <td>
+                    {u.votacion?.entrada || "Sin"} {u.votacion?.fondo || "voto"}
+                  </td>
                 </tr>
               ))
             ) : (

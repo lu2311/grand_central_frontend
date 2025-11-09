@@ -1,40 +1,36 @@
-import { useState, useEffect } from "react";
-import Swal from 'sweetalert2';
+import { useEffect, useState } from "react";
+import API from "../../utils/Api";
+import Swal from "sweetalert2";
 
 function Menu() {
   const [menu, setMenu] = useState([]);
 
   useEffect(() => {
- 
-    const menuDelDia = {
-      fecha: "02/08",
-      precio: 6.0,
-      entradas: ["Caldo de Pollo", "Yuquitas con Tártara"],
-      fondos: ["Ají de Gallina", "Pollo a la Mostaza"],
+    const fetchMenu = async () => {
+      try {
+        const res = await API.get("/api/menus");
+        setMenu(res.data);
+      } catch (error) {
+        Swal.fire("Error", "No se pudo cargar el menú", "error");
+      }
     };
-
-    const data = [
-      ...menuDelDia.entradas.map((nombre, index) => ({
-        id: index + 1,
-        nombre,
-        tipo: "Entrada",
-        precio: menuDelDia.precio,
-      })),
-      ...menuDelDia.fondos.map((nombre, index) => ({
-        id: menuDelDia.entradas.length + index + 1,
-        nombre,
-        tipo: "Fondo",
-        precio: menuDelDia.precio,
-      })),
-    ];
-
-    setMenu(data);
+    fetchMenu();
   }, []);
 
-  const handleDelete = (id) => {
-    if (window.confirm("¿Seguro que deseas eliminar este plato del menú?")) {
-      const updated = menu.filter((m) => m.id !== id);
-      setMenu(updated);
+  const handleDelete = async (id) => {
+    if (
+      await Swal.fire({
+        title: "¿Eliminar plato?",
+        showCancelButton: true,
+      }).then((r) => r.isConfirmed)
+    ) {
+      try {
+        await API.delete(`/menu/${id}`);
+        setMenu(menu.filter((m) => m.id !== id));
+        Swal.fire("Eliminado", "Elemento eliminado del menú", "success");
+      } catch {
+        Swal.fire("Error", "No se pudo eliminar el elemento", "error");
+      }
     }
   };
 
@@ -45,26 +41,25 @@ function Menu() {
   return (
     <div>
       <h2 className="admin-subtitulo mb-4">Menú del Día</h2>
-
       <div className="table-responsive">
-        <table className="table table-striped table-bordered shadow-sm align-middle">
+        <table className="table table-striped table-bordered shadow-sm">
           <thead className="table-dark">
             <tr>
               <th>ID</th>
               <th>Nombre</th>
               <th>Tipo</th>
-              <th>Precio (S/.)</th>
+              <th>Precio</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {menu.length > 0 ? (
+            {menu.length ? (
               menu.map((m) => (
                 <tr key={m.id}>
                   <td>{m.id}</td>
                   <td>{m.nombre}</td>
                   <td>{m.tipo}</td>
-                  <td>{m.precio.toFixed(2)}</td>
+                  <td>{m.precio}</td>
                   <td>
                     <button
                       className="btn btn-warning btn-sm me-2"
@@ -83,8 +78,8 @@ function Menu() {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center text-muted">
-                  No hay elementos en el menú
+                <td colSpan="5" className="text-center">
+                  No hay elementos
                 </td>
               </tr>
             )}

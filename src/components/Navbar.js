@@ -1,17 +1,30 @@
 // src/components/Navbar.js
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import API from "../utils/Api";
 
 function Navbar() {
-
   const [usuarioActivo, setUsuarioActivo] = useState(null);
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("usuarioActual");
-    if (storedUser) {
-      setUsuarioActivo(JSON.parse(storedUser));
-    }
+    const fetchUsuario = async () => {
+      try {
+        // El token ya debería estar guardado en cookies o headers (interceptor de API)
+        const res = await API.get("/usuarios/me");
+        setUsuarioActivo(res.data); // Guarda el usuario autenticado
+      } catch (error) {
+        // Si no hay token o está expirado, no hay usuario activo
+        setUsuarioActivo(null);
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    fetchUsuario();
   }, []);
+
+  if (cargando) return null; // evita parpadeo mientras se verifica el token
 
   return (
     <nav className="navbar navbar-expand-md navbar-light">
@@ -32,7 +45,6 @@ function Navbar() {
           <Link className="navbar-brand" to="/">
             <img
               src="../img/logo-removebg.png"
-              href="/   "
               width="50"
               alt="Logo de la página web"
             />
@@ -51,6 +63,8 @@ function Navbar() {
             <li className="nav-item">
               <a className="nav-link" href="/#contacto">Contacto</a>
             </li>
+
+            {/* 🔹 Condicional según si hay usuario autenticado */}
             {usuarioActivo ? (
               <li className="nav-item">
                 <Link className="nav-link" to="/profile">
