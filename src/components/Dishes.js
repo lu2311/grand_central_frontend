@@ -38,14 +38,14 @@ function Dishes() {
     try {
       const token = localStorage.getItem("token");
       await api.post(
-  "/reservas",
-  {
-    plato: { id: platoSeleccionado.id },
-  },
-  {
-    headers: { Authorization:`Bearer ${token}` },
-  }
-);
+        "/reservas",
+        {
+          plato: { id: platoSeleccionado.id },
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       Swal.fire({
         title: "Reserva confirmada",
@@ -69,21 +69,22 @@ function Dishes() {
         <div className="row">
           {platos.length > 0 ? (
             platos.map((plato) => (
-              <div key={plato.id} className="col-12 col-md-6 col-lg-4 mb-4">
-                <div className="platos shadow-sm rounded overflow-hidden">
+              <div key={plato.id} className="col-12 col-md-6 col-lg-4">
+                <div className="platos">
                   <img
                     src={
                       plato.imagen ||
                       "https://img.freepik.com/vector-gratis/plato-blanco-realista-aislado_1284-41743.jpg?semt=ais_hybrid&w=740&q=80"
                     }
                     alt={plato.nombre}
-                    className="img-fluid"
-                    style={{ height: "250px", objectFit: "cover" }}
                   />
-                  <div className="overlay p-3 bg-light">
-                    <p className="fw-bold">{plato.nombre}</p>
-                    <div className="d-flex justify-content-center gap-2">
-                      <button className="btn btn-primary" disabled>
+                  <div className="overlay">
+                    <p>{plato.nombre}</p>
+                    <div className="iconos-contenedor">
+                      <button
+                        type="button"
+                        className="btn no-clickable btn-primary"
+                      >
                         S/.{plato.precio}
                       </button>
                       <button
@@ -107,7 +108,12 @@ function Dishes() {
       </div>
 
       {/* Modal Confirmación */}
-      <div className="modal fade" id="confirmModalPlato" tabIndex="-1" aria-hidden="true">
+      <div
+        className="modal fade"
+        id="confirmModalPlato"
+        tabIndex="-1"
+        aria-hidden="true"
+      >
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             {platoSeleccionado ? (
@@ -116,7 +122,11 @@ function Dishes() {
                   <h5 className="modal-title">
                     Confirmar Reserva - {platoSeleccionado.nombre}
                   </h5>
-                  <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="modal"
+                  ></button>
                 </div>
                 <div className="modal-body text-center">
                   <img
