@@ -391,8 +391,6 @@ transition: transform 0.3s ease-in-out;
 transition: transform 0.3s ease-in-out;
 }
 
-
-
 .fondo:hover {
   transform: translateY(-10px);
 }
@@ -409,6 +407,11 @@ transition: transform 0.3s ease-in-out;
   letter-spacing: 2px;
   font-weight: bold;
   border-radius: 8px;
+}
+
+.img-votacion{
+  max-height: 120px;
+  object-fit: cover;
 }
 
 /*Contacto*/
