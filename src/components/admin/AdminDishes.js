@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import API from "../../utils/Api";
 
@@ -30,28 +30,18 @@ function Platos() {
     }
 
     try {
-      // 🔑 Obtenemos el token guardado tras el login
-      const token = localStorage.getItem("token");
-
       if (editId) {
-        await API.put(`/platos/${editId}`, formData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await API.put(`/platos/${editId}`, formData);
         Swal.fire("Actualizado", "Plato actualizado correctamente", "success");
       } else {
-        await API.post("/platos", formData, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        await API.post("/platos", formData);
         Swal.fire("Agregado", "Plato agregado correctamente", "success");
       }
-
       setFormData({ nombre: "", precio: "", imagen: "" });
       setEditId(null);
-
       const res = await API.get("/platos");
       setPlatos(res.data);
     } catch (error) {
-      console.error(error);
       Swal.fire("Error", "No se pudo guardar el plato", "error");
     }
   };
@@ -64,17 +54,10 @@ function Platos() {
       }).then((r) => r.isConfirmed)
     ) {
       try {
-        // 🔑 Token también en eliminación
-        const token = localStorage.getItem("token");
-
-        await API.delete(`/platos/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
+        await API.delete(`/platos/${id}`);
         setPlatos(platos.filter((p) => p.id !== id));
         Swal.fire("Eliminado", "Plato eliminado correctamente", "success");
       } catch (error) {
-        console.error(error);
         Swal.fire("Error", "No se pudo eliminar el plato", "error");
       }
     }
