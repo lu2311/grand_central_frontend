@@ -72,12 +72,14 @@ function Dishes() {
               <div key={plato.id} className="col-12 col-md-6 col-lg-4">
                 <div className="platos">
                   <img
-                    src={
-                      plato.imagen ||
-                      "https://img.freepik.com/vector-gratis/plato-blanco-realista-aislado_1284-41743.jpg?semt=ais_hybrid&w=740&q=80"
-                    }
-                    alt={plato.nombre}
-                  />
+  src={
+    plato.imagen
+      ? `https://grand-central-backend.onrender.com${plato.imagen}`
+      : "/placeholder.jpg"
+  }
+  alt={plato.nombre}
+  className="img-fluid rounded"
+/>
                   <div className="overlay">
                     <p>{plato.nombre}</p>
                     <div className="iconos-contenedor">
