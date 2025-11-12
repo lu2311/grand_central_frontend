@@ -63,6 +63,14 @@ function Platos() {
     p.nombre.toLowerCase().includes(search.toLowerCase())
   );
 
+  function convertirLinkDrive(url) {
+  const match = url.match(/\/d\/(.*?)\//);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+  return url; // Si no es link de Drive, lo devuelve igual
+}
+
   return (
     <div>
       <h2 className="admin-subtitulo mb-4">Platos</h2>

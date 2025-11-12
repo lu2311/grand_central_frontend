@@ -62,6 +62,14 @@ function Dishes() {
     }
   };
 
+  function convertirLinkDrive(url) {
+  const match = url.match(/\/d\/(.*?)\//);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+  return url; // Si no es link de Drive, lo devuelve igual
+}
+
   return (
     <section id="platos" className="platos-carta d-flex flex-column">
       <h2 className="seccion-titulo">Platos a la Carta</h2>
@@ -73,7 +81,8 @@ function Dishes() {
                 <div className="platos">
                   <img
                     src={
-                      plato.imagen ||
+                      plato.imagen
+                      ? convertirLinkDrive(plato.imagen):
                       "https://img.freepik.com/vector-gratis/plato-blanco-realista-aislado_1284-41743.jpg?semt=ais_hybrid&w=740&q=80"
                     }
                     alt={plato.nombre}
