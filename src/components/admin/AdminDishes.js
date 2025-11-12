@@ -118,7 +118,7 @@ function Platos() {
       className="btn btn-outline-secondary"
       onClick={() =>
         window.open(
-          "https://drive.google.com/drive/folders/TU_ID_DE_CARPETA_AQUI",
+          "https://drive.google.com/drive/folders/1DnfKOjzHMBxOfQoFewxUjd0oOXoCWsO6?usp=sharing",
           "_blank"
         )
       }
