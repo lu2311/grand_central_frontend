@@ -4,11 +4,7 @@ import API from "../../utils/Api";
 
 function Platos() {
   const [platos, setPlatos] = useState([]);
-  const [formData, setFormData] = useState({
-    nombre: "",
-    precio: "",
-    imagen: "",
-  });
+  const [formData, setFormData] = useState({ nombre: "", precio: "", imagen: "" });
   const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
 
@@ -47,12 +43,7 @@ function Platos() {
   };
 
   const handleDelete = async (id) => {
-    if (
-      await Swal.fire({
-        title: "¿Eliminar plato?",
-        showCancelButton: true,
-      }).then((r) => r.isConfirmed)
-    ) {
+    if (await Swal.fire({ title: "¿Eliminar plato?", showCancelButton: true }).then(r => r.isConfirmed)) {
       try {
         await API.delete(`/platos/${id}`);
         setPlatos(platos.filter((p) => p.id !== id));
@@ -78,9 +69,7 @@ function Platos() {
 
       {/* Buscador */}
       <div className="input-group mb-3">
-        <span className="btn btn-primary">
-          <i className="bi bi-search"></i>
-        </span>
+        <span className="btn btn-primary"><i className="bi bi-search"></i></span>
         <input
           type="text"
           className="form-control"
@@ -99,9 +88,7 @@ function Platos() {
               name="nombre"
               placeholder="Nombre"
               value={formData.nombre}
-              onChange={(e) =>
-                setFormData({ ...formData, nombre: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
               className="form-control"
             />
           </div>
@@ -112,9 +99,7 @@ function Platos() {
               name="precio"
               placeholder="Precio"
               value={formData.precio}
-              onChange={(e) =>
-                setFormData({ ...formData, precio: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, precio: e.target.value })}
               className="form-control"
             />
           </div>
@@ -123,9 +108,7 @@ function Platos() {
               name="imagen"
               placeholder="URL Imagen"
               value={formData.imagen}
-              onChange={(e) =>
-                setFormData({ ...formData, imagen: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, imagen: e.target.value })}
               className="form-control"
             />
           </div>
@@ -153,45 +136,20 @@ function Platos() {
               filteredPlatos.map((p) => (
                 <tr key={p.id}>
                   <td>{p.nombre}</td>
-                  <td>
-                    <img
-                      src={
-                        p.imagenBase64
-                          ? `data:image/jpeg;base64,${p.imagenBase64}`
-                          : p.imagen ||
-                            "https://img.freepik.com/vector-gratis/plato-blanco-realista-aislado_1284-41743.jpg?semt=ais_hybrid&w=740&q=80"
-                      }
-                      alt={p.nombre}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </td>
+                  <td><img src={p.imagen} alt={p.nombre} width="60" /></td>
                   <td>{Number(p.precio).toFixed(2)}</td>
                   <td>
-                    <button
-                      className="btn btn-warning btn-sm me-2"
-                      onClick={() => handleEdit(p)}
-                    >
+                    <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(p)}>
                       <i className="bi bi-pencil-square"></i>
                     </button>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(p.id)}
-                    >
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(p.id)}>
                       <i className="bi bi-trash"></i>
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
-              <tr>
-                <td colSpan="4" className="text-center">
-                  No hay platos
-                </td>
-              </tr>
+              <tr><td colSpan="4" className="text-center">No hay platos</td></tr>
             )}
           </tbody>
         </table>

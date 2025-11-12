@@ -73,17 +73,10 @@ function Dishes() {
                 <div className="platos">
                   <img
                     src={
-                      plato.imagenBase64
-                        ? `data:image/jpeg;base64,${plato.imagenBase64}`
-                        : "https://img.freepik.com/vector-gratis/plato-blanco-realista-aislado_1284-41743.jpg?semt=ais_hybrid&w=740&q=80"
+                      plato.imagen ||
+                      "https://img.freepik.com/vector-gratis/plato-blanco-realista-aislado_1284-41743.jpg?semt=ais_hybrid&w=740&q=80"
                     }
                     alt={plato.nombre}
-                    style={{
-                      width: "100%",
-                      height: "250px",
-                      objectFit: "cover",
-                      borderRadius: "8px",
-                    }}
                   />
                   <div className="overlay">
                     <p>{plato.nombre}</p>
