@@ -32,10 +32,14 @@ function Platos() {
 
   try {
     if (editId) {
-      await API.put(`/platos/${editId}`, data);
+      await API.put(`/platos/${editId}`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       Swal.fire("Actualizado", "Plato actualizado correctamente", "success");
     } else {
-      await API.post("/platos", data);
+      await API.post("/platos", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       Swal.fire("Agregado", "Plato agregado correctamente", "success");
     }
     setFormData({ nombre: "", precio: "", imagen: "" });
