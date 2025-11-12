@@ -21,35 +21,26 @@ function Platos() {
   }, []);
 
   const handleSave = async () => {
-  if (!formData.nombre || !formData.precio) {
-    return Swal.fire("Error", "Todos los campos son obligatorios", "error");
-  }
-
-  const data = new FormData();
-  data.append("nombre", formData.nombre);
-  data.append("precio", formData.precio);
-  if (formData.imagen) data.append("imagen", formData.imagen);
-
-  try {
-    if (editId) {
-      await API.put(`/platos/${editId}`, data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      Swal.fire("Actualizado", "Plato actualizado correctamente", "success");
-    } else {
-      await API.post("/platos", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      Swal.fire("Agregado", "Plato agregado correctamente", "success");
+    if (!formData.nombre || !formData.precio || !formData.imagen) {
+      return Swal.fire("Error", "Todos los campos son obligatorios", "error");
     }
-    setFormData({ nombre: "", precio: "", imagen: "" });
-    setEditId(null);
-    const res = await API.get("/platos");
-    setPlatos(res.data);
-  } catch (error) {
-    Swal.fire("Error", "No se pudo guardar el plato", "error");
-  }
-};
+
+    try {
+      if (editId) {
+        await API.put(`/platos/${editId}`, formData);
+        Swal.fire("Actualizado", "Plato actualizado correctamente", "success");
+      } else {
+        await API.post("/platos", formData);
+        Swal.fire("Agregado", "Plato agregado correctamente", "success");
+      }
+      setFormData({ nombre: "", precio: "", imagen: "" });
+      setEditId(null);
+      const res = await API.get("/platos");
+      setPlatos(res.data);
+    } catch (error) {
+      Swal.fire("Error", "No se pudo guardar el plato", "error");
+    }
+  };
 
   const handleDelete = async (id) => {
     if (await Swal.fire({ title: "¿Eliminar plato?", showCancelButton: true }).then(r => r.isConfirmed)) {
@@ -113,14 +104,14 @@ function Platos() {
             />
           </div>
           <div className="col-md">
-  <input
-    type="file"
-    name="imagen"
-    accept="image/*"
-    onChange={(e) => setFormData({ ...formData, imagen: e.target.files[0] })}
-    className="form-control"
-  />
-</div>
+            <input
+              name="imagen"
+              placeholder="URL Imagen"
+              value={formData.imagen}
+              onChange={(e) => setFormData({ ...formData, imagen: e.target.value })}
+              className="form-control"
+            />
+          </div>
           <div className="col-md-auto">
             <button onClick={handleSave} className="btn btn-primary">
               {editId ? "Actualizar" : "Agregar"}
