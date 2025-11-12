@@ -63,14 +63,6 @@ function Platos() {
     p.nombre.toLowerCase().includes(search.toLowerCase())
   );
 
-  function convertirLinkDrive(url) {
-  const match = url.match(/\/d\/(.*?)\//);
-  if (match && match[1]) {
-    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-  }
-  return url; // Si no es link de Drive, lo devuelve igual
-}
-
   return (
     <div>
       <h2 className="admin-subtitulo mb-4">Platos</h2>
@@ -91,56 +83,41 @@ function Platos() {
       <div className="mb-4 p-3 border rounded bg-light shadow-sm">
         <h3>{editId ? "Editar Plato" : "Agregar Nuevo Plato"}</h3>
         <div className="row g-2">
-  <div className="col-md">
-    <input
-      name="nombre"
-      placeholder="Nombre"
-      value={formData.nombre}
-      onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-      className="form-control"
-    />
-  </div>
-  <div className="col-md">
-    <input
-      type="number"
-      step="0.01"
-      name="precio"
-      placeholder="Precio"
-      value={formData.precio}
-      onChange={(e) => setFormData({ ...formData, precio: e.target.value })}
-      className="form-control"
-    />
-  </div>
-
-  {/* --- CAMPO DE IMAGEN --- */}
-  <div className="col-md-5 d-flex gap-2">
-    <input
-      name="imagen"
-      placeholder="URL Imagen (Drive)"
-      value={formData.imagen}
-      onChange={(e) => setFormData({ ...formData, imagen: e.target.value })}
-      className="form-control"
-    />
-    <button
-      type="button"
-      className="btn btn-outline-secondary"
-      onClick={() =>
-        window.open(
-          "https://drive.google.com/drive/folders/1DnfKOjzHMBxOfQoFewxUjd0oOXoCWsO6?usp=sharing",
-          "_blank"
-        )
-      }
-    >
-      <i className="bi bi-cloud-arrow-up"></i> Drive
-    </button>
-  </div>
-
-  <div className="col-md-auto">
-    <button onClick={handleSave} className="btn btn-primary">
-      {editId ? "Actualizar" : "Agregar"}
-    </button>
-  </div>
-</div>
+          <div className="col-md">
+            <input
+              name="nombre"
+              placeholder="Nombre"
+              value={formData.nombre}
+              onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md">
+            <input
+              type="number"
+              step="0.01"
+              name="precio"
+              placeholder="Precio"
+              value={formData.precio}
+              onChange={(e) => setFormData({ ...formData, precio: e.target.value })}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md">
+            <input
+              name="imagen"
+              placeholder="URL Imagen"
+              value={formData.imagen}
+              onChange={(e) => setFormData({ ...formData, imagen: e.target.value })}
+              className="form-control"
+            />
+          </div>
+          <div className="col-md-auto">
+            <button onClick={handleSave} className="btn btn-primary">
+              {editId ? "Actualizar" : "Agregar"}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Tabla */}
