@@ -57,7 +57,7 @@ function Dishes() {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "No se pudo realizar la reserva. Inténtalo de nuevo.",
+        text: "No se pudo realizar la reserva, solo puedes reservar un plato por día.",
       });
     }
   };
