@@ -1,4 +1,3 @@
-// src/pages/Login.js
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import "../App.css";
@@ -54,7 +53,7 @@ function Login() {
     }
   };
 
-  // 🔹 REGISTRO + LOGIN AUTOMÁTICO
+  // REGISTRO + LOGIN AUTOMÁTICO
   const handleSignup = async (e) => {
     e.preventDefault();
     const nombre = e.target.nombre.value;
