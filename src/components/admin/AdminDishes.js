@@ -26,17 +26,35 @@ function Platos() {
     }
 
     try {
+      let imageUrl = formData.imagen;
+
+      // Si el campo imagen es un archivo (no una URL)
+      if (formData.imagen instanceof File) {
+        const uploadData = new FormData();
+        uploadData.append("file", formData.imagen);
+
+        const resUpload = await API.post("/upload", uploadData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        imageUrl = resUpload.data.secure_url;
+      }
+
+      const platoData = { ...formData, imagen: imageUrl };
+
       if (editId) {
-        await API.put(`/platos/${editId}`, formData);
+        await API.put(`/platos/${editId}`, platoData);
         Swal.fire("Actualizado", "Plato actualizado correctamente", "success");
       } else {
-        await API.post("/platos", formData);
+        await API.post("/platos", platoData);
         Swal.fire("Agregado", "Plato agregado correctamente", "success");
       }
+
       setFormData({ nombre: "", precio: "", imagen: "" });
       setEditId(null);
       const res = await API.get("/platos");
       setPlatos(res.data);
+
     } catch (error) {
       Swal.fire("Error", "No se pudo guardar el plato", "error");
     }
@@ -107,8 +125,9 @@ function Platos() {
             <input
               name="imagen"
               placeholder="URL Imagen"
-              value={formData.imagen}
-              onChange={(e) => setFormData({ ...formData, imagen: e.target.value })}
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFormData({ ...formData, imagen: e.target.files[0] })}
               className="form-control"
             />
           </div>
