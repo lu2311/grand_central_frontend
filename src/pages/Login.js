@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { jwtDecode } from "jwt-decode";
 import "../App.css";
 import NavBar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -8,7 +9,7 @@ import api from "../utils/Api";
 function Login() {
   const [isLogin, setIsLogin] = useState(true);
 
-  // 🔹 LOGIN (usa /api/auth/login)
+  // 🔹 LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
     const correo = e.target.correo.value;
@@ -19,7 +20,7 @@ function Login() {
       Swal.fire("Bienvenido Administrador");
       localStorage.setItem(
         "usuarioActual",
-        JSON.stringify({ nombre: "Admin", correo, rol: "admin" })
+        JSON.stringify({ nombre: "Admin", correo, rol: "ADMIN" })
       );
       window.location.href = "/admin";
       return;
@@ -31,19 +32,32 @@ function Login() {
         contrasenia: password,
       });
 
-      // Guardar token en localStorage
+      // 🔸 Guardar token en localStorage
       const token = response.data.token;
       localStorage.setItem("token", token);
 
-      // Obtener datos del usuario autenticado (opcional)
-      // Puedes crear un endpoint /api/usuarios/me, pero por ahora guardamos el correo
-      Swal.fire("Inicio de sesión exitoso");
+      // 🔸 Decodificar token JWT
+      const decoded = jwtDecode(token);
+      const roles = decoded.rol || [];
+      const isAdmin = roles.some((r) => r.authority === "ROLE_ADMIN");
+
+      // 🔸 Guardar información del usuario
       localStorage.setItem(
         "usuarioActual",
-        JSON.stringify({ correo, rol: "usuario" })
+        JSON.stringify({
+          correo,
+          rol: isAdmin ? "ADMIN" : "USER",
+        })
       );
 
-      window.location.href = "/profile";
+      // 🔸 Redirección según rol
+      if (isAdmin) {
+        Swal.fire("Bienvenido Administrador");
+        window.location.href = "/admin";
+      } else {
+        Swal.fire("Inicio de sesión exitoso");
+        window.location.href = "/profile";
+      }
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -54,7 +68,7 @@ function Login() {
     }
   };
 
-  // 🔹 REGISTRO (usa /api/usuarios/registro)
+  // 🔹 REGISTRO
   const handleSignup = async (e) => {
     e.preventDefault();
     const nombre = e.target.nombre.value;
