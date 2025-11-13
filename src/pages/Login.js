@@ -111,7 +111,7 @@ function Login() {
         title: "Registro exitoso",
         text: "Bienvenido a tu perfil",
         icon: "success",
-        timer: 1500,
+        timer: 3500,
         showConfirmButton: false,
       });
 
