@@ -1,3 +1,4 @@
+// src/pages/Login.js
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import "../App.css";
@@ -9,7 +10,7 @@ import api from "../utils/Api";
 function Login() {
   const [isLogin, setIsLogin] = useState(true);
 
-  // 🔹 LOGIN
+  // LOGIN
   const handleLogin = async (e) => {
     e.preventDefault();
     const correo = e.target.correo.value;
@@ -21,16 +22,13 @@ function Login() {
         contrasenia: password,
       });
 
-      // 🔸 Guardar token en localStorage
       const token = response.data.token;
       localStorage.setItem("token", token);
 
-      // 🔸 Decodificar token JWT
       const decoded = jwtDecode(token);
       const roles = decoded.rol || [];
       const isAdmin = roles.some((r) => r.authority === "ROLE_ADMIN");
 
-      // 🔸 Guardar información del usuario
       localStorage.setItem(
         "usuarioActual",
         JSON.stringify({
@@ -39,7 +37,6 @@ function Login() {
         })
       );
 
-      // 🔸 Redirección según rol
       if (isAdmin) {
         Swal.fire("Bienvenido Administrador");
         window.location.href = "/admin";
@@ -57,7 +54,7 @@ function Login() {
     }
   };
 
-  // 🔹 REGISTRO
+  // 🔹 REGISTRO + LOGIN AUTOMÁTICO
   const handleSignup = async (e) => {
     e.preventDefault();
     const nombre = e.target.nombre.value;
@@ -80,11 +77,12 @@ function Login() {
         nombre,
         apellido,
         correo,
-        contrasenia: password, // backend espera 'contrasenia'
+        contrasenia: password,
       };
 
       await api.post("/usuarios/registro", newUser);
 
+      // Login automático después del registro
       const loginResponse = await api.post("/auth/login", {
         correo,
         contrasenia: password,
@@ -115,7 +113,7 @@ function Login() {
         showConfirmButton: false,
       });
 
-      // 🔁 Redirigir al perfil
+      // Redirigir al perfil
       window.location.href = "/profile";
     } catch (error) {
       console.error(error);
@@ -131,7 +129,6 @@ function Login() {
   return (
     <>
       <NavBar />
-
       <div className="auth-container container d-flex justify-content-center align-items-center mt-5 mb-5">
         <div className="card shadow-lg p-4">
           <div className="text-center mb-4">
@@ -143,30 +140,19 @@ function Login() {
             </p>
           </div>
 
-          {/* Formulario dinámico */}
           {isLogin ? (
             <form onSubmit={handleLogin}>
               <div className="mb-3">
                 <label htmlFor="correo" className="form-label">
                   Correo electrónico
                 </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="correo"
-                  required
-                />
+                <input type="email" className="form-control" id="correo" required />
               </div>
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
                   Contraseña
                 </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  required
-                />
+                <input type="password" className="form-control" id="password" required />
               </div>
               <div className="d-grid mt-4">
                 <button type="submit" className="btn btn-primary btn-lg">
@@ -177,59 +163,24 @@ function Login() {
           ) : (
             <form onSubmit={handleSignup}>
               <div className="mb-3">
-                <label htmlFor="nombre" className="form-label">
-                  Nombre
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="nombre"
-                  required
-                />
+                <label htmlFor="nombre" className="form-label">Nombre</label>
+                <input type="text" className="form-control" id="nombre" required />
               </div>
               <div className="mb-3">
-                <label htmlFor="apellido" className="form-label">
-                  Apellido
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="apellido"
-                  required
-                />
+                <label htmlFor="apellido" className="form-label">Apellido</label>
+                <input type="text" className="form-control" id="apellido" required />
               </div>
               <div className="mb-3">
-                <label htmlFor="correo" className="form-label">
-                  Correo electrónico
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="correo"
-                  required
-                />
+                <label htmlFor="correo" className="form-label">Correo electrónico</label>
+                <input type="email" className="form-control" id="correo" required />
               </div>
               <div className="mb-3">
-                <label htmlFor="password" className="form-label">
-                  Nueva Contraseña
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  required
-                />
+                <label htmlFor="password" className="form-label">Nueva Contraseña</label>
+                <input type="password" className="form-control" id="password" required />
               </div>
               <div className="mb-3">
-                <label htmlFor="repeatPassword" className="form-label">
-                  Repetir Contraseña
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="repeatPassword"
-                  required
-                />
+                <label htmlFor="repeatPassword" className="form-label">Repetir Contraseña</label>
+                <input type="password" className="form-control" id="repeatPassword" required />
               </div>
               <div className="d-grid mt-4">
                 <button type="submit" className="btn btn-primary btn-lg">
@@ -239,7 +190,6 @@ function Login() {
             </form>
           )}
 
-          {/* Enlace dinámico */}
           <div className="text-center mt-3">
             <p className="text-muted">
               {isLogin ? (
@@ -267,7 +217,6 @@ function Login() {
           </div>
         </div>
       </div>
-
       <Footer />
     </>
   );
