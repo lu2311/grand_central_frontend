@@ -15,17 +15,6 @@ function Login() {
     const correo = e.target.correo.value;
     const password = e.target.password.value;
 
-    // Caso especial: admin hardcodeado (opcional)
-    if (correo === "admin@admin.com" && password === "admin") {
-      Swal.fire("Bienvenido Administrador");
-      localStorage.setItem(
-        "usuarioActual",
-        JSON.stringify({ nombre: "Admin", correo, rol: "ADMIN" })
-      );
-      window.location.href = "/admin";
-      return;
-    }
-
     try {
       const response = await api.post("/auth/login", {
         correo,
@@ -96,14 +85,38 @@ function Login() {
 
       await api.post("/usuarios/registro", newUser);
 
-      Swal.fire({
-        title: "Éxito",
-        text: "Usuario registrado con éxito",
-        icon: "success",
+      const loginResponse = await api.post("/auth/login", {
+        correo,
+        contrasenia: password,
       });
 
-      setIsLogin(true);
-      e.target.reset();
+      const token = loginResponse.data.token;
+      localStorage.setItem("token", token);
+
+      const decoded = jwtDecode(token);
+      const roles = decoded.rol || [];
+      const isAdmin = roles.some((r) => r.authority === "ROLE_ADMIN");
+
+      localStorage.setItem(
+        "usuarioActual",
+        JSON.stringify({
+          nombre,
+          apellido,
+          correo,
+          rol: isAdmin ? "ADMIN" : "USER",
+        })
+      );
+
+      Swal.fire({
+        title: "Registro exitoso",
+        text: "Bienvenido a tu perfil",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      // 🔁 Redirigir al perfil
+      window.location.href = "/profile";
     } catch (error) {
       console.error(error);
       Swal.fire({
