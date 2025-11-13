@@ -3,7 +3,8 @@ function Sidebar({ setActiveComponent }) {
 
   const handleLogout = () => {
     localStorage.removeItem("usuarioActual");
-    window.location.href = "/";
+    localStorage.removeItem("token");
+    window.location.href = "/";    
   };
 
   return (
