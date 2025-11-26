@@ -59,3 +59,28 @@ export const crearVotacion = async (entradas, fondos) => {
     throw error;
   }
 };
+
+// -----------------------
+// Registrar voto
+// -----------------------
+export const registrarVoto = async (entradaId, fondoId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const body = {
+      entradaId,
+      fondoId
+    };
+
+    const res = await axios.post(`${API}/votar`, body, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("Error registrando voto:", error);
+    throw error;
+  }
+};
