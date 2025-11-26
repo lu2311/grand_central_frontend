@@ -14,7 +14,7 @@ function Platos() {
         const res = await API.get("/platos");
         setPlatos(res.data);
       } catch (error) {
-        Swal.fire("Error", "No se pudo cargar los platos", "error");
+        Swal.fire("Error", error.friendlyMessage || "No se pudo cargar los platos", "error");
       }
     };
     fetchPlatos();
@@ -56,7 +56,7 @@ function Platos() {
       setPlatos(res.data);
 
     } catch (error) {
-      Swal.fire("Error", "No se pudo guardar el plato", "error");
+      Swal.fire("Error", error.friendlyMessage || "No se pudo guardar el plato", "error");
     }
   };
 
@@ -67,7 +67,7 @@ function Platos() {
         setPlatos(platos.filter((p) => p.id !== id));
         Swal.fire("Eliminado", "Plato eliminado correctamente", "success");
       } catch (error) {
-        Swal.fire("Error", "No se pudo eliminar el plato", "error");
+        Swal.fire("Error", error.friendlyMessage || "No se pudo eliminar el plato", "error");
       }
     }
   };
