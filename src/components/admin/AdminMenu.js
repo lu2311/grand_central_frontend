@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
-import api from "../utils/Api";
+import api from "../../utils/Api";
 
 function Menu() {
   const [menu, setMenu] = useState([]);
