@@ -1,55 +1,88 @@
-import { useState, useEffect } from "react";
-import { getVotacionesHistorial, getVotacionDelDia } from "../../utils/Votations";
-import VotationsHistory from "./VotationsHistory";
-import VotationsResults from "./VotationsResults";
+import { useEffect, useState } from "react";
+import {
+  apiGetVotaciones,
+  apiGetVotacionDelDia,
+  apiCrearVotacion,
+} from "../../utils/VotationsService";
 
 function AdminVoting() {
-  const [activeTab, setActiveTab] = useState("historial");
   const [votaciones, setVotaciones] = useState([]);
   const [votacionHoy, setVotacionHoy] = useState(null);
+  const [entradas, setEntradas] = useState(["", "", "", ""]);
+  const [fondos, setFondos] = useState(["", "", "", ""]);
+
+  async function load() {
+    const list = await apiGetVotaciones();
+    const hoy = await apiGetVotacionDelDia();
+    setVotaciones(list);
+    setVotacionHoy(hoy);
+  }
 
   useEffect(() => {
-    const cargar = async () => {
-      const historial = await getVotacionesHistorial();
-      const hoy = await getVotacionDelDia();
-
-      setVotaciones(historial);
-      setVotacionHoy(hoy);
-    };
-
-    cargar();
+    load();
   }, []);
+
+  async function handleCrearVotacion() {
+    await apiCrearVotacion(
+      entradas.filter((x) => x !== ""),
+      fondos.filter((x) => x !== "")
+    );
+
+    await load();
+  }
 
   return (
     <div>
-      <h2 className="admin-subtitulo mb-4">Administrar Votaciones</h2>
+      <h2>Administrar Votaciones</h2>
 
-      <div className="d-flex mb-3">
-        <button
-          className={`flex-fill btn ${activeTab === "historial" ? "btn-dark" : "btn-outline-dark"}`}
-          onClick={() => setActiveTab("historial")}
-        >
-          Historial
-        </button>
-        <button
-          className={`flex-fill btn ${activeTab === "resultados" ? "btn-dark" : "btn-outline-dark"}`}
-          onClick={() => setActiveTab("resultados")}
-        >
-          Resultados
-        </button>
-      </div>
+      <h3>Votación de Hoy</h3>
+      {votacionHoy ? (
+        <p>YA existe votación activa hoy.</p>
+      ) : (
+        <div>
+          <h4>Crear nueva votación</h4>
+          <label>Entradas:</label>
+          {entradas.map((v, i) => (
+            <input
+              key={i}
+              value={v}
+              onChange={(e) =>
+                setEntradas(
+                  entradas.map((x, j) => (i === j ? e.target.value : x))
+                )
+              }
+            />
+          ))}
+          <br />
 
-      {activeTab === "historial" && (
-        <VotationsHistory
-          votaciones={votaciones}
-          setVotaciones={setVotaciones}
-          setVotacionHoy={setVotacionHoy}
-        />
+          <label>Fondos:</label>
+          {fondos.map((v, i) => (
+            <input
+              key={i}
+              value={v}
+              onChange={(e) =>
+                setFondos(
+                  fondos.map((x, j) => (i === j ? e.target.value : x))
+                )
+              }
+            />
+          ))}
+
+          <br />
+          <button onClick={handleCrearVotacion}>Crear</button>
+        </div>
       )}
 
-      {activeTab === "resultados" && votacionHoy && (
-        <VotationsResults votacionHoy={votacionHoy} />
-      )}
+      <hr />
+      <h3>Historial</h3>
+
+      {votaciones.length === 0 && <p>No hay votaciones.</p>}
+
+      {votaciones.map((v) => (
+        <div key={v.id}>
+          <p>{v.fecha}</p>
+        </div>
+      ))}
     </div>
   );
 }

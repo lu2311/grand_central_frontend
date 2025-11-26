@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getUsuarioActual, setUsuarioActual } from "../utils/Reservations";
-import { getVotacionDelDia, registrarVoto } from "../utils/Votations";
 import Swal from "sweetalert2";
+import {
+  apiGetVotacionDelDia,
+  apiRegistrarVoto,
+} from "../utils/VotationsService";
 
 const Votation = () => {
   const [votacion, setVotacion] = useState(null);
@@ -9,28 +11,20 @@ const Votation = () => {
   const [fondoSeleccionado, setFondoSeleccionado] = useState(null);
 
   useEffect(() => {
-    const cargar = async () => {
-      const data = await getVotacionDelDia();
-      setVotacion(data);
-    };
-    cargar();
+    loadVotacion();
   }, []);
 
-  if (!votacion) {
-    return <h2 className="text-center mt-5">No hay votación creada para hoy</h2>;
+  async function loadVotacion() {
+    try {
+      const data = await apiGetVotacionDelDia();
+      setVotacion(data);
+    } catch (error) {
+      setVotacion(null);
+    }
   }
 
+  // NUEVO: vota en backend
   const handleVotar = async () => {
-    const usuario = getUsuarioActual();
-    if (!usuario) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Debes iniciar sesión para votar",
-      });
-      return;
-    }
-
     if (!entradaSeleccionada || !fondoSeleccionado) {
       Swal.fire({
         icon: "error",
@@ -41,50 +35,83 @@ const Votation = () => {
     }
 
     try {
-      await registrarVoto(entradaSeleccionada, fondoSeleccionado);
+      await apiRegistrarVoto(entradaSeleccionada, fondoSeleccionado);
 
       Swal.fire({
         icon: "success",
-        title: "Voto registrado",
-        text: "Tu voto fue registrado correctamente",
+        title: "¡Voto registrado!",
+        text: "Tu voto fue exitoso 🎉",
       });
-
-      usuario.votacion = {
-        fecha: new Date().toLocaleDateString("es-PE"),
-        entrada: votacion.entradas.find(e => e.id === entradaSeleccionada)?.nombre,
-        fondo: votacion.fondos.find(f => f.id === fondoSeleccionado)?.nombre,
-      };
-
-      setUsuarioActual(usuario);
-
-    } catch (error) {
+    } catch (err) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: error.response?.data?.message || "No se pudo registrar tu voto",
+        text: err.response?.data?.message || "No se pudo votar",
       });
     }
   };
 
+  if (!votacion) {
+    return (
+      <h2 className="text-center mt-5">No hay votación creada para hoy</h2>
+    );
+  }
+
   return (
     <>
-      <div id="votacion" className="container my-5">
+      {/* Sección Votación */}
+      <div id="votacion" className="votacion-explicacion container my-5">
         <div className="row g-4">
+          {/* Explicación */}
+          <div className="col-lg-6 p-50">
+            <div className="votacion-explicacion-container card shadow-sm border-0 h-100">
+              <div className="card-body">
+                <h2 className="titulo-votacion card-title mb-3">
+                  Votación para el Menú del Día
+                </h2>
+                <p className="card-text">
+                  En esta nueva sección puedes participar activamente en la
+                  elección del menú que se servirá al día siguiente...
+                </p>
+                <div className="text-center mt-2">
+                  <img
+                    src="../img/comidas_criollas_peruanas.png"
+                    alt="Imagen explicativa"
+                    className="comida-criolla img-fluid rounded"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
-          {/* ENTRADAS */}
+          {/* Votaciones */}
           <div className="col-lg-6">
             <div className="card shadow-sm border-0 h-100">
               <div className="card-body">
-                <h2 className="card-title text-center mb-4">Votación de Entradas</h2>
+                <h2 className="card-title text-center mb-4">
+                  Votación de Entradas
+                </h2>
                 <div className="votacion-entrada">
                   {votacion.entradas.map((entrada) => (
                     <label className="entrada" key={entrada.id}>
                       <div className="nombre-entrada">{entrada.nombre}</div>
-                      <img
-                        src="https://via.placeholder.com/200"
-                        alt={entrada.nombre}
-                        className="img-fluid rounded img-votacion"
-                      />
+                      <div className="imagen-entrada text-center my-2">
+                        <img
+                          src={
+                            entrada.imagen ||
+                            "https://imgs.search.brave.com/L35xuY9rLpgS4Fh-6AD4abs8X9S_AKzxuMeG3ccOkrE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA3LzkxLzIyLzU5/LzM2MF9GXzc5MTIy/NTkyNl9NVUVQdWtv/MHhnakt2V2VBSEdQ/ZEVyUUhZNlgyWkox/bS5qcGc"
+                          }
+                          alt={entrada.nombre}
+                          className="img-fluid rounded img-votacion"
+                        />
+                      </div>
+                      <div className="barra-resultado">
+                        <div
+                          className="relleno"
+                          style={{ width: `${entrada.porcentaje}%` }}
+                        ></div>
+                      </div>
+                      <div className="porcentaje">{entrada.porcentaje}%</div>
                       <div className="checkbox-container">
                         <input
                           type="radio"
@@ -97,17 +124,31 @@ const Votation = () => {
                   ))}
                 </div>
 
-                {/* FONDOS */}
-                <h2 className="card-title text-center my-4">Votación de Fondos</h2>
+                <h2 className="card-title text-center my-4">
+                  Votación de Fondos
+                </h2>
+
                 <div className="votacion-fondo">
                   {votacion.fondos.map((fondo) => (
                     <label className="fondo" key={fondo.id}>
                       <div className="nombre-fondo">{fondo.nombre}</div>
-                      <img
-                        src="https://via.placeholder.com/200"
-                        alt={fondo.nombre}
-                        className="img-fluid rounded img-votacion"
-                      />
+                      <div className="imagen-fondo text-center my-2">
+                        <img
+                          src={
+                            fondo.imagen ||
+                            "https://imgs.search.brave.com/L35xuY9rLpgS4Fh-6AD4abs8X9S_AKzxuMeG3ccOkrE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA3LzkxLzIyLzU5/LzM2MF9GXzc5MTIy/NTkyNl9NVUVQdWtv/MHhnakt2V2VBSEdQ/ZEVyUUhZNlgyWkox/bS5qcGc"
+                          }
+                          alt={fondo.nombre}
+                          className="img-fluid rounded img-votacion"
+                        />
+                      </div>
+                      <div className="barra-resultado">
+                        <div
+                          className="relleno"
+                          style={{ width: `${fondo.porcentaje}%` }}
+                        ></div>
+                      </div>
+                      <div className="porcentaje">{fondo.porcentaje}%</div>
                       <div className="checkbox-container">
                         <input
                           type="radio"
@@ -120,56 +161,12 @@ const Votation = () => {
                   ))}
                 </div>
 
-                <div className="d-flex justify-content-center mt-4">
+                <div className="boton-votacion d-flex justify-content-center">
                   <button
-                    className="btn btn-success"
                     data-bs-toggle="modal"
                     data-bs-target="#confirmModalVotacion"
-                  >
-                    Votar
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* MODAL */}
-          <div
-            className="modal fade"
-            id="confirmModalVotacion"
-            tabIndex="-1"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirmar acción</h5>
-                  <button className="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div className="modal-body">
-                  {entradaSeleccionada && fondoSeleccionado ? (
-                    <>
-                      Vas a votar por{" "}
-                      <strong>
-                        {votacion.entradas.find(e => e.id === entradaSeleccionada)?.nombre}
-                      </strong>{" "}
-                      y{" "}
-                      <strong>
-                        {votacion.fondos.find(f => f.id === fondoSeleccionado)?.nombre}
-                      </strong>
-                    </>
-                  ) : (
-                    "Debes seleccionar una entrada y un fondo antes de votar."
-                  )}
-                </div>
-                <div className="modal-footer">
-                  <button className="btn btn-secondary" data-bs-dismiss="modal">
-                    Cancelar
-                  </button>
-                  <button
+                    type="button"
                     className="btn btn-success"
-                    data-bs-dismiss="modal"
-                    onClick={handleVotar}
                   >
                     Votar
                   </button>
@@ -177,7 +174,41 @@ const Votation = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
+
+      {/* Modal Confirmación */}
+      <div
+        className="modal fade"
+        id="confirmModalVotacion"
+        tabIndex="-1"
+        aria-labelledby="confirmModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Confirmar acción</h5>
+            </div>
+            <div className="modal-body">
+              {entradaSeleccionada && fondoSeleccionado
+                ? "¿Confirmas tu voto?"
+                : "Selecciona entrada y fondo primero"}
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" data-bs-dismiss="modal">
+                Cancelar
+              </button>
+              <button
+                className="btn btn-success"
+                data-bs-dismiss="modal"
+                onClick={handleVotar}
+              >
+                Votar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </>
