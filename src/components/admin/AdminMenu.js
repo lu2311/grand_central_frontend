@@ -1,65 +1,85 @@
-import { useEffect, useState } from "react";
-import API from "../../utils/Api";
+import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
+import api from "../utils/Api";
 
 function Menu() {
   const [menu, setMenu] = useState([]);
 
+  // Obtener la fecha actual en formato YYYY-MM-DD
+  const today = new Date().toISOString().split("T")[0];
+
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await API.get("/api/menus");
-        setMenu(res.data);
+        const res = await api.get(`/menus/fecha/${today}`);
+
+        const menuDelDia = res.data;
+
+        // Transformar entradas y fondos en lista legible
+        const data = [
+          ...menuDelDia.entradas.map((nombre, index) => ({
+            id: index + 1,
+            nombre,
+            tipo: "Entrada",
+            precio: menuDelDia.precio,
+          })),
+          ...menuDelDia.fondos.map((nombre, index) => ({
+            id: menuDelDia.entradas.length + index + 1,
+            nombre,
+            tipo: "Fondo",
+            precio: menuDelDia.precio,
+          })),
+        ];
+
+        setMenu(data);
       } catch (error) {
-        Swal.fire("Error", "No se pudo cargar el menú", "error");
+        console.error("Error al obtener menú del día:", error);
+        setMenu([]); // si no hay menú
       }
     };
+
     fetchMenu();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (
-      await Swal.fire({
-        title: "¿Eliminar plato?",
-        showCancelButton: true,
-      }).then((r) => r.isConfirmed)
-    ) {
-      try {
-        await API.delete(`/menu/${id}`);
-        setMenu(menu.filter((m) => m.id !== id));
-        Swal.fire("Eliminado", "Elemento eliminado del menú", "success");
-      } catch {
-        Swal.fire("Error", "No se pudo eliminar el elemento", "error");
-      }
-    }
+  const handleDelete = () => {
+    Swal.fire({
+      icon: "warning",
+      title: "No se puede eliminar ítems",
+      text: "El backend no permite eliminar entradas/fondos individualmente. Solo editar todo el menú.",
+    });
   };
 
-  const handleEdit = (id) => {
-    Swal.fire(`Editar ítem de menú con id: ${id}`);
+  const handleEdit = () => {
+    Swal.fire({
+      icon: "info",
+      title: "Edición no disponible",
+      text: "El backend solo permite reemplazar el menú completo, no editar ítems por separado.",
+    });
   };
 
   return (
     <div>
       <h2 className="admin-subtitulo mb-4">Menú del Día</h2>
+
       <div className="table-responsive">
-        <table className="table table-striped table-bordered shadow-sm">
+        <table className="table table-striped table-bordered shadow-sm align-middle">
           <thead className="table-dark">
             <tr>
               <th>ID</th>
               <th>Nombre</th>
               <th>Tipo</th>
-              <th>Precio</th>
+              <th>Precio (S/.)</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {menu.length ? (
+            {menu.length > 0 ? (
               menu.map((m) => (
                 <tr key={m.id}>
                   <td>{m.id}</td>
                   <td>{m.nombre}</td>
                   <td>{m.tipo}</td>
-                  <td>{m.precio}</td>
+                  <td>{m.precio.toFixed(2)}</td>
                   <td>
                     <button
                       className="btn btn-warning btn-sm me-2"
@@ -78,8 +98,8 @@ function Menu() {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center">
-                  No hay elementos
+                <td colSpan="5" className="text-center text-muted">
+                  No hay menú creado para hoy
                 </td>
               </tr>
             )}
