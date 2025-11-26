@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { getUsuarioActual, setUsuarioActual } from "../utils/Reservations";
+import { getVotacionDelDia, registrarVoto } from "../utils/Votations";
 import Swal from "sweetalert2";
-import {
-  apiGetVotacionDelDia,
-  apiRegistrarVoto,
-} from "../utils/VotationsService";
 
 const Votation = () => {
   const [votacion, setVotacion] = useState(null);
@@ -11,20 +9,38 @@ const Votation = () => {
   const [fondoSeleccionado, setFondoSeleccionado] = useState(null);
 
   useEffect(() => {
-    loadVotacion();
+    setVotacion(getVotacionDelDia());
   }, []);
 
-  async function loadVotacion() {
-    try {
-      const data = await apiGetVotacionDelDia();
-      setVotacion(data);
-    } catch (error) {
-      setVotacion(null);
-    }
+  if (!votacion) {
+    return (
+      <h2 className="text-center mt-5">No hay votación creada para hoy</h2>
+    );
   }
 
-  // NUEVO: vota en backend
-  const handleVotar = async () => {
+  const handleVotar = () => {
+    const usuario = getUsuarioActual();
+    if (!usuario) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Debes iniciar sesión para votar",
+      });
+      return;
+    }
+
+    const hoy = new Date().toLocaleDateString("es-PE");
+
+    // Verificamos si ya votó HOY
+    if (usuario.votacion && usuario.votacion.fecha === hoy) {
+      Swal.fire({
+        title: "Exito",
+        text: "Ya realizaste tu votación de hoy",
+        icon: "success",
+      });
+      return;
+    }
+
     if (!entradaSeleccionada || !fondoSeleccionado) {
       Swal.fire({
         icon: "error",
@@ -34,29 +50,20 @@ const Votation = () => {
       return;
     }
 
-    try {
-      await apiRegistrarVoto(entradaSeleccionada, fondoSeleccionado);
+    usuario.votacion = {
+      fecha: hoy,
+      entrada: votacion.entradas.find((e) => e.id === entradaSeleccionada)
+        ?.nombre,
+      fondo: votacion.fondos.find((f) => f.id === fondoSeleccionado)?.nombre,
+    };
+    setUsuarioActual(usuario);
 
-      Swal.fire({
-        icon: "success",
-        title: "¡Voto registrado!",
-        text: "Tu voto fue exitoso 🎉",
-      });
-    } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: err.response?.data?.message || "No se pudo votar",
-      });
-    }
-  };
+    registrarVoto(entradaSeleccionada, fondoSeleccionado);
 
-  if (!votacion) {
-    return (
-      <h2 className="text-center mt-5">No hay votación creada para hoy</h2>
+    Swal.fire(
+      `Tu voto se guardó: ${usuario.votacion.entrada} y ${usuario.votacion.fondo}`
     );
-  }
-
+  };
   return (
     <>
       {/* Sección Votación */}
@@ -71,7 +78,16 @@ const Votation = () => {
                 </h2>
                 <p className="card-text">
                   En esta nueva sección puedes participar activamente en la
-                  elección del menú que se servirá al día siguiente...
+                  elección del menú que se servirá al día siguiente. Revisa las
+                  imágenes de los platos disponibles y selecciona tus opciones
+                  favoritas en las categorías de entradas y fondos.
+                  <br />
+                  Tu voto es importante para que podamos ofrecer los platos más
+                  deseados por todos. Las votaciones están abiertas hasta las
+                  6:00 pm cada día, y los resultados definirán el menú del día
+                  siguiente.
+                  <br />
+                  ¡No pierdas la oportunidad de elegir lo que más te gusta!
                 </p>
                 <div className="text-center mt-2">
                   <img
@@ -101,7 +117,7 @@ const Votation = () => {
                             entrada.imagen ||
                             "https://imgs.search.brave.com/L35xuY9rLpgS4Fh-6AD4abs8X9S_AKzxuMeG3ccOkrE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA3LzkxLzIyLzU5/LzM2MF9GXzc5MTIy/NTkyNl9NVUVQdWtv/MHhnakt2V2VBSEdQ/ZEVyUUhZNlgyWkox/bS5qcGc"
                           }
-                          alt={entrada.nombre}
+                          alt={`Imagen de ${entrada.nombre}`}
                           className="img-fluid rounded img-votacion"
                         />
                       </div>
@@ -127,7 +143,6 @@ const Votation = () => {
                 <h2 className="card-title text-center my-4">
                   Votación de Fondos
                 </h2>
-
                 <div className="votacion-fondo">
                   {votacion.fondos.map((fondo) => (
                     <label className="fondo" key={fondo.id}>
@@ -138,7 +153,7 @@ const Votation = () => {
                             fondo.imagen ||
                             "https://imgs.search.brave.com/L35xuY9rLpgS4Fh-6AD4abs8X9S_AKzxuMeG3ccOkrE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA3LzkxLzIyLzU5/LzM2MF9GXzc5MTIy/NTkyNl9NVUVQdWtv/MHhnakt2V2VBSEdQ/ZEVyUUhZNlgyWkox/bS5qcGc"
                           }
-                          alt={fondo.nombre}
+                          alt={`Imagen de ${fondo.nombre}`}
                           className="img-fluid rounded img-votacion"
                         />
                       </div>
@@ -177,8 +192,7 @@ const Votation = () => {
         </div>
       </div>
 
-
-      {/* Modal Confirmación */}
+      {/* Modal de Votación */}
       <div
         className="modal fade"
         id="confirmModalVotacion"
@@ -189,18 +203,36 @@ const Votation = () => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Confirmar acción</h5>
+              <h5 className="modal-title" id="confirmModalLabel">
+                Confirmar acción
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
             </div>
             <div className="modal-body">
-              {entradaSeleccionada && fondoSeleccionado
-                ? "¿Confirmas tu voto?"
-                : "Selecciona entrada y fondo primero"}
+              {votacion.entradaNombre && votacion.fondoNombre ? (
+                <>
+                  Vas a votar por <strong>{votacion.entradaNombre}</strong> como
+                  entrada y <strong>{votacion.fondoNombre}</strong> como fondo.
+                </>
+              ) : (
+                "Debes seleccionar una entrada y un fondo antes de votar."
+              )}
             </div>
             <div className="modal-footer">
-              <button className="btn btn-secondary" data-bs-dismiss="modal">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
                 Cancelar
               </button>
               <button
+                type="button"
                 className="btn btn-success"
                 data-bs-dismiss="modal"
                 onClick={handleVotar}
