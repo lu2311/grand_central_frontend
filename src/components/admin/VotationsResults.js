@@ -1,4 +1,5 @@
 function VotationsResults({ votacionHoy }) {
+
   const renderResultados = (titulo, lista, color) => {
     const total = lista.reduce((acc, item) => acc + item.votos, 0);
 
@@ -13,14 +14,12 @@ function VotationsResults({ votacionHoy }) {
                 <span>{item.nombre}</span>
                 <span>{item.votos} votos ({porcentaje}%)</span>
               </div>
+
               <div className="progress" style={{ height: "20px" }}>
                 <div
                   className={`progress-bar ${color}`}
                   role="progressbar"
                   style={{ width: `${porcentaje}%` }}
-                  aria-valuenow={porcentaje}
-                  aria-valuemin="0"
-                  aria-valuemax="100"
                 ></div>
               </div>
             </div>

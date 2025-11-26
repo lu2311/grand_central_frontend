@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getVotaciones, getVotacionDelDia } from "../../utils/Votations";
+import { getVotacionesHistorial, getVotacionDelDia } from "../../utils/Votations";
 import VotationsHistory from "./VotationsHistory";
 import VotationsResults from "./VotationsResults";
 
@@ -9,15 +9,21 @@ function AdminVoting() {
   const [votacionHoy, setVotacionHoy] = useState(null);
 
   useEffect(() => {
-    setVotaciones(getVotaciones());
-    setVotacionHoy(getVotacionDelDia());
+    const cargar = async () => {
+      const historial = await getVotacionesHistorial();
+      const hoy = await getVotacionDelDia();
+
+      setVotaciones(historial);
+      setVotacionHoy(hoy);
+    };
+
+    cargar();
   }, []);
 
   return (
     <div>
       <h2 className="admin-subtitulo mb-4">Administrar Votaciones</h2>
 
-      {/* Tabs */}
       <div className="d-flex mb-3">
         <button
           className={`flex-fill btn ${activeTab === "historial" ? "btn-dark" : "btn-outline-dark"}`}
@@ -34,9 +40,16 @@ function AdminVoting() {
       </div>
 
       {activeTab === "historial" && (
-        <VotationsHistory votaciones={votaciones} setVotaciones={setVotaciones} setVotacionHoy={setVotacionHoy} />
+        <VotationsHistory
+          votaciones={votaciones}
+          setVotaciones={setVotaciones}
+          setVotacionHoy={setVotacionHoy}
+        />
       )}
-      {activeTab === "resultados" && votacionHoy && <VotationsResults votacionHoy={votacionHoy} />}
+
+      {activeTab === "resultados" && votacionHoy && (
+        <VotationsResults votacionHoy={votacionHoy} />
+      )}
     </div>
   );
 }

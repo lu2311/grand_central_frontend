@@ -1,52 +1,61 @@
-export function getVotaciones() {
-  return JSON.parse(localStorage.getItem("votaciones")) || [];
-}
+import axios from "axios";
 
-export function saveVotaciones(votaciones) {
-  localStorage.setItem("votaciones", JSON.stringify(votaciones));
-}
+const API = "https://grand-central-backend.onrender.com/api/votaciones";
 
-// Obtener la votación del día actual
-export function getVotacionDelDia() {
-  const hoy = new Date().toLocaleDateString("es-PE");
-  return getVotaciones().find((v) => v.fecha === hoy) || null;
-}
+// -----------------------
+// Obtener historial completo
+// -----------------------
+export const getVotacionesHistorial = async () => {
+  try {
+    const res = await axios.get(API);
+    return res.data; // lista de votaciones
+  } catch (e) {
+    console.error("Error obteniendo historial:", e);
+    return [];
+  }
+};
 
-// Crear una nueva votación para el día
-export function crearVotacion(entradas, fondos) {
-  const hoy = new Date().toLocaleDateString("es-PE");
-  const votaciones = getVotaciones();
+// -----------------------
+// Obtener votación del día
+// -----------------------
+export const getVotacionDelDia = async () => {
+  try {
+    const res = await axios.get(`${API}/opciones`);
+    const opciones = res.data;
 
-  // si ya existe una votación hoy, no crear otra
-  if (votaciones.some((v) => v.fecha === hoy)) return;
+    return {
+      fecha: new Date().toLocaleDateString("es-PE"),
+      entradas: opciones.filter(o => o.tipo === "ENTRADA"),
+      fondos: opciones.filter(o => o.tipo === "FONDO"),
+    };
 
-  const nueva = {
-    id: Date.now(),
-    fecha: hoy,
-    entradas: entradas.map((e) => ({ ...e, votos: 0 })),
-    fondos: fondos.map((f) => ({ ...f, votos: 0 })),
-  };
+  } catch (error) {
+    return null;
+  }
+};
 
-  votaciones.push(nueva);
-  saveVotaciones(votaciones);
-  return nueva;
-}
+// -----------------------
+// Crear votación del día
+// -----------------------
+export const crearVotacion = async (entradas, fondos) => {
+  try {
+    const token = localStorage.getItem("token");
 
-// Registrar voto en la votación del día
-export function registrarVoto(entradaId, fondoId) {
-  const hoy = new Date().toLocaleDateString("es-PE");
-  const votaciones = getVotaciones();
-  const index = votaciones.findIndex((v) => v.fecha === hoy);
-  if (index === -1) return;
+    const body = {
+      entradas: entradas.map(e => e.nombre),
+      fondos: fondos.map(f => f.nombre)
+    };
 
-  const votacion = votaciones[index];
+    const res = await axios.post(API, body, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-  const entrada = votacion.entradas.find((e) => e.id === entradaId);
-  if (entrada) entrada.votos += 1;
+    return res.data;
 
-  const fondo = votacion.fondos.find((f) => f.id === fondoId);
-  if (fondo) fondo.votos += 1;
-
-  votaciones[index] = votacion;
-  saveVotaciones(votaciones);
-}
+  } catch (error) {
+    console.error("Error creando votación:", error);
+    throw error;
+  }
+};
