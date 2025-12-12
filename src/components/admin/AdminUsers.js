@@ -9,7 +9,18 @@ function Usuarios() {
     const fetchUsuarios = async () => {
       try {
         const res = await API.get("/usuarios");
-        setUsuarios(res.data);
+        const usuarios = res.data;
+
+        // Filtramos las reservas para mostrar solo las de hoy
+        const fechaHoy = new Date().toISOString().split("T")[0]; // Fecha de hoy en formato yyyy-MM-dd
+        
+        // Filtramos las reservas de cada usuario
+        usuarios.forEach((u) => {
+          // Filtrar solo las reservas que son del día de hoy
+          u.reservas = u.reservas.filter((r) => r.fechaReserva === fechaHoy);
+        });
+
+        setUsuarios(usuarios);
       } catch (error) {
         console.error("Error al cargar usuarios:", error);
       }
@@ -17,11 +28,22 @@ function Usuarios() {
     fetchUsuarios();
   }, []);
 
+  // Filtrado por nombre o correo
   const filtered = usuarios.filter(
     (u) =>
       u.nombre?.toLowerCase().includes(search.toLowerCase()) ||
       u.correo?.toLowerCase().includes(search.toLowerCase())
   );
+
+  // Función para mostrar la reserva (nombre del plato o "Menú del día")
+  const mostrarReserva = (reserva) => {
+    if (reserva.plato) {
+      return reserva.plato.nombre; // Si es plato, mostrar el nombre
+    } else if (reserva.menu) {
+      return "Menú del día"; // Si es menú, mostrar "Menú del día"
+    }
+    return <span className="badge bg-warning">Sin reserva</span>; // Mostrar etiqueta de advertencia si no hay reserva
+  };
 
   return (
     <div>
@@ -50,7 +72,6 @@ function Usuarios() {
               <th>Nombre</th>
               <th>Correo</th>
               <th>Reserva</th>
-              <th>Voto</th>
             </tr>
           </thead>
           <tbody>
@@ -61,18 +82,18 @@ function Usuarios() {
                   <td>{u.nombre}</td>
                   <td>{u.correo}</td>
                   <td>
-  {u.reservas && u.reservas.length > 0
-    ? u.reservas.map((r) => r.plato?.nombre).join(", ")
-    : "Sin reserva"}
-</td>
-                  <td>
-                    {u.votacion?.entrada || "Sin"} {u.votacion?.fondo || "voto"}
+                    {/* Solo mostrar la reserva si es de hoy */}
+                    {u.reservas && u.reservas.length > 0
+                      ? u.reservas.map((r, idx) => (
+                          <div key={idx}>{mostrarReserva(r)}</div>
+                        ))
+                      : <span className="badge bg-warning">Sin reserva</span>}
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="text-center text-muted">
+                <td colSpan="4" className="text-center text-muted">
                   No se encontraron usuarios
                 </td>
               </tr>

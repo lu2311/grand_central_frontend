@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getVotaciones, crearVotacion } from "../../utils/Votations";
+import { fetchVotaciones, crearVotacionBackend } from "../../utils/Votations";
 import Swal from 'sweetalert2';
 
 function VotationsHistory({ votaciones, setVotaciones, setVotacionHoy }) {
@@ -7,47 +7,29 @@ function VotationsHistory({ votaciones, setVotaciones, setVotacionHoy }) {
     const [entradas, setEntradas] = useState(["", "", ""]);
     const [fondos, setFondos] = useState(["", "", ""]);
 
-    const handleCrearVotacion = () => {
+    const handleCrearVotacion = async () => {
         const entradasValidas = entradas.filter(e => e.trim() !== "");
         const fondosValidos = fondos.filter(f => f.trim() !== "");
 
         if (entradasValidas.length < 3 || fondosValidos.length < 3) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Debes ingresar al menos 3 entradas y 3 fondos"
-            });
+            Swal.fire("Error", "Debes ingresar al menos 3 entradas y 3 fondos", "error");
             return;
         }
 
-        const objEntradas = entradasValidas.map((e, idx) => ({
-            id: `E${idx}-${Date.now()}`,
-            nombre: e,
-        }));
-        const objFondos = fondosValidos.map((f, idx) => ({
-            id: `F${idx}-${Date.now()}`,
-            nombre: f,
-        }));
+        try {
+            const nueva = await crearVotacionBackend(entradasValidas, fondosValidos);
 
-        const nueva = crearVotacion(objEntradas, objFondos);
+            Swal.fire("Éxito", "Votación creada para hoy", "success");
 
-        if (nueva) {
-            Swal.fire({
-                title: "Éxito",
-                text: "Votación creada para hoy",
-                icon: "success"
-            });
-            setVotaciones(getVotaciones());
+            const lista = await fetchVotaciones();
+            setVotaciones(lista);
             setVotacionHoy(nueva);
+
             setShowModal(false);
             setEntradas(["", "", ""]);
             setFondos(["", "", ""]);
-        } else {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Ya existe una votación para hoy"
-            });
+        } catch (err) {
+            Swal.fire("Error", err.friendlyMessage || "No se pudo crear la votación", "error");
         }
     };
 
@@ -65,17 +47,34 @@ function VotationsHistory({ votaciones, setVotaciones, setVotacionHoy }) {
                             <th>Fecha</th>
                             <th>Entradas</th>
                             <th>Fondos</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {votaciones.map((v) => (
-                            <tr key={v.id}>
-                                <td>{v.fecha}</td>
-                                <td>{v.entradas.map((e) => e.nombre).join(", ")}</td>
-                                <td>{v.fondos.map((f) => f.nombre).join(", ")}</td>
-                            </tr>
-                        ))}
+                        {votaciones.map((v) => {
+                            const opciones = Array.isArray(v.opciones) ? v.opciones : [];
+
+                            const entradas = opciones
+                                .filter((o) => o.tipo === "ENTRADA")
+                                .map((e) => `${e.nombre} (${e.votos})`)
+                                .join(", ");
+
+                            const fondos = opciones
+                                .filter((o) => o.tipo === "FONDO")
+                                .map((f) => `${f.nombre} (${f.votos})`)
+                                .join(", ");
+
+                            return (
+                                <tr key={v.id}>
+                                    <td>{v.fecha}</td>
+                                    <td>{entradas || "—"}</td>
+                                    <td>{fondos || "—"}</td>
+                                    <td>{v.estado}</td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
+
                 </table>
             </div>
 

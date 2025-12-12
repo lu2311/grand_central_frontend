@@ -53,12 +53,7 @@ function Dishes() {
         icon: "success",
       });
     } catch (error) {
-      console.error("Error al reservar el plato:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudo realizar la reserva, solo puedes reservar un plato por día.",
-      });
+      Swal.fire("Error", error.friendlyMessage || "No se pudo registrar la reserva", "error");
     }
   };
 

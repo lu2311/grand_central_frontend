@@ -8,7 +8,7 @@ function Menu() {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await API.get("/api/menus");
+        const res = await API.get("/menus");
         setMenu(res.data);
       } catch (error) {
         Swal.fire("Error", "No se pudo cargar el menú", "error");
@@ -20,22 +20,18 @@ function Menu() {
   const handleDelete = async (id) => {
     if (
       await Swal.fire({
-        title: "¿Eliminar plato?",
+        title: "¿Eliminar menú?",
         showCancelButton: true,
       }).then((r) => r.isConfirmed)
     ) {
       try {
-        await API.delete(`/menu/${id}`);
+        await API.delete(`/menus/${id}`);
         setMenu(menu.filter((m) => m.id !== id));
-        Swal.fire("Eliminado", "Elemento eliminado del menú", "success");
+        Swal.fire("Eliminado", "Menú eliminado del sistema", "success");
       } catch {
-        Swal.fire("Error", "No se pudo eliminar el elemento", "error");
+        Swal.fire("Error", "No se pudo eliminar el menú", "error");
       }
     }
-  };
-
-  const handleEdit = (id) => {
-    Swal.fire(`Editar ítem de menú con id: ${id}`);
   };
 
   return (
@@ -46,8 +42,9 @@ function Menu() {
           <thead className="table-dark">
             <tr>
               <th>ID</th>
-              <th>Nombre</th>
-              <th>Tipo</th>
+              <th>Fecha</th>
+              <th>Entradas</th>
+              <th>Fondos</th>
               <th>Precio</th>
               <th>Acciones</th>
             </tr>
@@ -57,16 +54,11 @@ function Menu() {
               menu.map((m) => (
                 <tr key={m.id}>
                   <td>{m.id}</td>
-                  <td>{m.nombre}</td>
-                  <td>{m.tipo}</td>
+                  <td>{m.fecha}</td>
+                  <td>{m.entradas.join(", ")}</td>
+                  <td>{m.fondos.join(", ")}</td>
                   <td>{m.precio}</td>
                   <td>
-                    <button
-                      className="btn btn-warning btn-sm me-2"
-                      onClick={() => handleEdit(m.id)}
-                    >
-                      <i className="bi bi-pencil-square"></i>
-                    </button>
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => handleDelete(m.id)}
@@ -78,8 +70,8 @@ function Menu() {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center">
-                  No hay elementos
+                <td colSpan="6" className="text-center">
+                  No hay menús disponibles
                 </td>
               </tr>
             )}

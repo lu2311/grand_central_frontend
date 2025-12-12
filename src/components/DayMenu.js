@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; 
 import api from "../utils/Api";
 import Swal from "sweetalert2";
 
@@ -8,12 +8,14 @@ function DayMenu() {
   const [fondoSeleccionado, setFondoSeleccionado] = useState("");
 
   useEffect(() => {
-    api.get("/menus")
+    const fechaHoy = new Date().toISOString().split('T')[0]; 
+
+    api.get(`/menus/fecha/${fechaHoy}`)
       .then(res => setMenuDelDia(res.data))
-      .catch(() =>
-        //Swal.fire("Error", "No se pudo cargar el menú del día", "error")
-      console.log("No se pudo cargar el menú del día")
-      );
+      .catch(() => {
+        Swal.fire("Error", "No se pudo cargar el menú del día", "error");
+        console.log("No se pudo cargar el menú del día");
+      });
   }, []);
 
   const handleEntradaChange = (e) => {
@@ -27,15 +29,18 @@ function DayMenu() {
   const confirmarReserva = async () => {
     if (entradaSeleccionada && fondoSeleccionado && menuDelDia) {
       try {
-        await api.post("/reservas", {
-          tipo: "menu",
-          entrada: entradaSeleccionada,
-          fondo: fondoSeleccionado,
-          precio: menuDelDia.precio,
-        });
+        await api.post(
+          "/reservas",
+          {
+            menu: { id: menuDelDia.id },
+            entradaElegida: entradaSeleccionada,
+            fondoElegido: fondoSeleccionado
+          },
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
         Swal.fire("Reserva confirmada", "Tu menú fue reservado", "success");
-      } catch {
-        Swal.fire("Error", "No se pudo registrar la reserva", "error");
+      } catch (error) {
+        Swal.fire("Error", error.friendlyMessage || "No se pudo registrar la reserva", "error");
       }
     } else {
       Swal.fire("Error", "Selecciona una entrada y un fondo", "error");

@@ -12,14 +12,12 @@ function Profile() {
   const [sugerencia, setSugerencia] = useState("");
   const [platosConsumidos] = useState(["Lomo Saltado", "Ají de Gallina", "Arroz con Pollo"]);
 
-  // 🔹 Cargar usuario autenticado y su reserva desde backend
   useEffect(() => {
     const fetchUsuario = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) return;
 
-        // Llamada al endpoint que devuelve el usuario autenticado
         const response = await api.get("/usuarios/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -27,7 +25,6 @@ function Profile() {
         const usuarioData = response.data;
         setUser(usuarioData);
 
-        // Si tiene reservas, tomamos la más reciente
         if (usuarioData.reservas && usuarioData.reservas.length > 0) {
           const ultimaReserva = usuarioData.reservas[usuarioData.reservas.length - 1];
           setReserva(ultimaReserva);
@@ -45,7 +42,6 @@ function Profile() {
     fetchUsuario();
   }, []);
 
-  // 🔹 Cancelar reserva
   const handleCancelarReserva = async () => {
     if (!reserva) return;
 
@@ -68,12 +64,11 @@ function Profile() {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "No se pudo cancelar la reserva.",
+        text: error.friendlyMessage || "No se pudo cancelar la reserva.",
       });
     }
   };
 
-  // 🔹 Cerrar sesión
   const handleCerrarSesion = () => {
     localStorage.removeItem("usuarioActual");
     localStorage.removeItem("token");
@@ -81,7 +76,6 @@ function Profile() {
     window.location.href = "/login";
   };
 
-  // 🔹 Formularios de código y sugerencia
   const handleSorteo = (e) => {
     e.preventDefault();
     if (codigo.trim() === "") {
@@ -100,6 +94,16 @@ function Profile() {
     }
     Swal.fire(`Gracias por tu sugerencia: ${sugerencia}`);
     setSugerencia("");
+  };
+
+  const mostrarReserva = (reserva) => {
+    console.log("Reserva:", reserva);
+    if (reserva.plato) {
+      return reserva.plato.nombre; // Si es plato, mostrar el nombre del plato
+    } else if (reserva.menu) {
+      return `${reserva.entradaElegida} y ${reserva.fondoElegido}`; // Si es menú, mostrar entrada y fondo
+    }
+    return "Sin reserva";
   };
 
   return (
@@ -163,10 +167,10 @@ function Profile() {
                   <>
                     <ul className="list-group list-group-flush">
                       <li className="list-group-item">
-                        <strong>Plato:</strong> {reserva.plato?.nombre}
+                        <strong>Reserva:</strong> {mostrarReserva(reserva)}
                       </li>
                       <li className="list-group-item">
-                        <strong>Precio:</strong> S/.{reserva.plato?.precio}
+                        <strong>Precio:</strong> S/.{reserva.plato?.precio || reserva.menu?.precio}
                       </li>
                       <li className="list-group-item">
                         <strong>Fecha:</strong> {reserva.fechaReserva}

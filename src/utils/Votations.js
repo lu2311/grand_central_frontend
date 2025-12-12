@@ -1,52 +1,33 @@
-export function getVotaciones() {
-  return JSON.parse(localStorage.getItem("votaciones")) || [];
+import api from "./Api";
+
+// ADMIN – Listar votaciones históricas
+export async function fetchVotaciones() {
+  const res = await api.get("/votaciones");
+  return res.data;
 }
 
-export function saveVotaciones(votaciones) {
-  localStorage.setItem("votaciones", JSON.stringify(votaciones));
+// ADMIN – Crear votación del día
+export async function crearVotacionBackend(entradas, fondos) {
+  const body = { entradas, fondos };
+  const res = await api.post("/votaciones", body);
+  return res.data;
 }
 
-// Obtener la votación del día actual
-export function getVotacionDelDia() {
-  const hoy = new Date().toLocaleDateString("es-PE");
-  return getVotaciones().find((v) => v.fecha === hoy) || null;
+// ADMIN – Eliminar votación del día
+export async function eliminarVotacion() {
+  const res = await api.delete("/votaciones");
+  return res.data;
 }
 
-// Crear una nueva votación para el día
-export function crearVotacion(entradas, fondos) {
-  const hoy = new Date().toLocaleDateString("es-PE");
-  const votaciones = getVotaciones();
-
-  // si ya existe una votación hoy, no crear otra
-  if (votaciones.some((v) => v.fecha === hoy)) return;
-
-  const nueva = {
-    id: Date.now(),
-    fecha: hoy,
-    entradas: entradas.map((e) => ({ ...e, votos: 0 })),
-    fondos: fondos.map((f) => ({ ...f, votos: 0 })),
-  };
-
-  votaciones.push(nueva);
-  saveVotaciones(votaciones);
-  return nueva;
+// USUARIO – Obtener opciones del día
+export async function fetchOpcionesHoy() {
+  const res = await api.get("/votaciones/opciones");
+  return res.data;
 }
 
-// Registrar voto en la votación del día
-export function registrarVoto(entradaId, fondoId) {
-  const hoy = new Date().toLocaleDateString("es-PE");
-  const votaciones = getVotaciones();
-  const index = votaciones.findIndex((v) => v.fecha === hoy);
-  if (index === -1) return;
-
-  const votacion = votaciones[index];
-
-  const entrada = votacion.entradas.find((e) => e.id === entradaId);
-  if (entrada) entrada.votos += 1;
-
-  const fondo = votacion.fondos.find((f) => f.id === fondoId);
-  if (fondo) fondo.votos += 1;
-
-  votaciones[index] = votacion;
-  saveVotaciones(votaciones);
+// USUARIO – Registrar un voto
+export async function registrarVotoBackend(entradaId, fondoId) {
+  const body = { entradaId, fondoId };
+  const res = await api.post("/votaciones/votar", body);
+  return res.data;
 }
