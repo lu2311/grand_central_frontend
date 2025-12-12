@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { getVotaciones, getVotacionDelDia } from "../../utils/Votations";
+import { fetchVotaciones, fetchOpcionesHoy } from "../../utils/Votations";
 import VotationsHistory from "./VotationsHistory";
 import VotationsResults from "./VotationsResults";
+import Swal from "sweetalert2";
 
 function AdminVoting() {
   const [activeTab, setActiveTab] = useState("historial");
@@ -9,8 +10,19 @@ function AdminVoting() {
   const [votacionHoy, setVotacionHoy] = useState(null);
 
   useEffect(() => {
-    setVotaciones(getVotaciones());
-    setVotacionHoy(getVotacionDelDia());
+    const cargar = async () => {
+      try {
+        const lista = await fetchVotaciones();
+        setVotaciones(lista);
+
+        const opcionesHoy = await fetchOpcionesHoy().catch(() => null);
+        setVotacionHoy(opcionesHoy);
+      } catch (error) {
+        Swal.fire("Error", error.friendlyMessage || "No se pudieron cargar las votaciones", "error");
+      }
+    };
+
+    cargar();
   }, []);
 
   return (
@@ -36,7 +48,13 @@ function AdminVoting() {
       {activeTab === "historial" && (
         <VotationsHistory votaciones={votaciones} setVotaciones={setVotaciones} setVotacionHoy={setVotacionHoy} />
       )}
-      {activeTab === "resultados" && votacionHoy && <VotationsResults votacionHoy={votacionHoy} />}
+      {activeTab === "resultados" && votacionHoy && <VotationsResults
+        votacionHoy={{
+          fecha: votacionHoy.fecha,
+          entradas: votacionHoy.filter((o) => o.tipo === "ENTRADA"),
+          fondos: votacionHoy.filter((o) => o.tipo === "FONDO"),
+        }}
+      />}
     </div>
   );
 }

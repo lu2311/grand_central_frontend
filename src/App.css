@@ -759,3 +759,18 @@ footer {
   background-color: #949494;
   border-color: #949494;
 }
+
+.table-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Espacio entre las tablas */
+  flex-wrap: wrap; /* Permite que las tablas se ajusten en pantallas pequeñas */
+}
+
+.table-responsive.dishes-table{
+  width: 40%; /* Aseguramos que ambas tablas tengan el mismo ancho */
+}
+
+.table-responsive.menu-table{
+  width: 55%; /* Aseguramos que ambas tablas tengan el mismo ancho */
+}
