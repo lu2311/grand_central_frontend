@@ -1,70 +1,56 @@
-# Getting Started with Create React App
+🍽️ Grand Central – Frontend (React)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Frontend desarrollado en React para la plataforma Grand Central, una aplicación donde los usuarios pueden explorar restaurantes, crear platos, dejar reseñas, ver votaciones y mucho más.
+Este proyecto consume la API desarrollada en Java Spring Boot.
 
-## Available Scripts
+🚀 Tecnologías utilizadas
+React 18
+React Router DOM
+Axios
+Context API
+SweetAlert2
+LocalStorage para tokens y sesión
 
-In the project directory, you can run:
+⚙️ Instalación y ejecución
+1️⃣ Clonar el repositorio
+git clone https://github.com/lu2311/grand_central_frontend.git
+cd grand-central-frontend
 
-### `npm start`
+2️⃣ Instalar dependencias
+npm install
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+3️⃣ Configurar variables de entorno
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Crear un archivo .env en la raíz con:
+REACT_APP_BACKEND_URL=http://localhost:8080
+Cambiar por la URL real cuando se despliegue en producción.
 
-### `npm test`
+▶️ Ejecutar en modo desarrollo
+npm start
+Aplicación disponible en:
+http://localhost:3000
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+📦 Generar build de producción
+npm run build
 
-### `npm run build`
+🔌 Conexión con el backend
+El proyecto consume la API del backend para:
+Gestión de usuarios (login, registro)
+Restaurantes
+Platos (con subida de imágenes a Cloudinary)
+Comentarios
+Votaciones y resultados
+Historial de votaciones
+Dashboard del administrador
+La comunicación se realiza mediante Axios usando el archivo ubicado en src/api/.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+🔐 Autenticación
+Basada en JWT enviado desde el backend.
+El token se guarda en localStorage.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Axios automáticamente agrega el token en cada request.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+🛠️ Scripts útiles
+npm start       # Inicia el servidor de desarrollo
+npm run build   # Genera build de producción
+npm run test    # Ejecuta pruebas (si existen)
