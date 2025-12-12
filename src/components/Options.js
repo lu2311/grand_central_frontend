@@ -11,10 +11,7 @@ const Hero = () => {
           </button>
           <div className="d-flex align-items-center">
             <span className="menu-info me-4">
-              MENÚ DE HOY:{" "}
-              <span className="text-muted">
-                {fondosDelDia.join(" | ")}
-              </span>
+              MENÚ DE HOY:{" "}              
             </span>
             <button className="btn btn-danger">
               <a href="#menu-dia">IR AL MENU DEL DÍA</a>
