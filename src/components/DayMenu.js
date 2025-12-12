@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; 
 import api from "../utils/Api";
 import Swal from "sweetalert2";
 
@@ -8,12 +8,14 @@ function DayMenu() {
   const [fondoSeleccionado, setFondoSeleccionado] = useState("");
 
   useEffect(() => {
-    const fechaHoy = new Date().toISOString().split('T')[0];
+    const fechaHoy = new Date().toISOString().split('T')[0]; 
+
     api.get(`/menus/fecha/${fechaHoy}`)
       .then(res => setMenuDelDia(res.data))
-      .catch(() =>
-        console.log("No se pudo cargar el menú del día")
-      );
+      .catch(() => {
+        Swal.fire("Error", "No se pudo cargar el menú del día", "error");
+        console.log("No se pudo cargar el menú del día");
+      });
   }, []);
 
   const handleEntradaChange = (e) => {

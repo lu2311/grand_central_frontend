@@ -55,8 +55,8 @@ function Menu() {
                 <tr key={m.id}>
                   <td>{m.id}</td>
                   <td>{m.fecha}</td>
-                  <td>{m.entradas.join(", ")}</td> {/* Muestra las entradas como una lista */}
-                  <td>{m.fondos.join(", ")}</td> {/* Muestra los fondos como una lista */}
+                  <td>{m.entradas.join(", ")}</td>
+                  <td>{m.fondos.join(", ")}</td>
                   <td>{m.precio}</td>
                   <td>
                     <button
